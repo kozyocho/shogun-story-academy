@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-paper text-ink dark:bg-moon dark:text-zinc-100 antialiased;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+@layer components {
+  .wa-card {
+    @apply rounded-2xl border border-zinc-200/70 bg-white/80 p-5 shadow-card backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/80;
+  }
+
+  .wa-title {
+    @apply text-xl font-semibold tracking-wide text-pine dark:text-emerald-300;
+  }
+
+  .wa-link {
+    @apply rounded-xl border border-pine/30 px-3 py-2 text-sm font-medium text-pine transition hover:bg-pine/10 dark:border-emerald-300/30 dark:text-emerald-200 dark:hover:bg-emerald-300/10;
+  }
+}
