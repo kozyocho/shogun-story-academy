@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Chapter {
+  id         Int      @id @default(autoincrement())
+  slug       String   @unique
+  title      String
+  order      Int
+  isPremium  Boolean  @default(false)
+  scenes     Scene[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Scene {
+  id           Int            @id @default(autoincrement())
+  slug         String         @unique
+  title        String
+  order        Int
+  body         String
+  choiceA      String
+  choiceB      String
+  historyNotes Json
+  glossary     Json
+  chapterId    Int
+  chapter      Chapter        @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  quizQuestions QuizQuestion[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([chapterId, order])
+}
+
+model QuizQuestion {
+  id          Int      @id @default(autoincrement())
+  sceneId     Int
+  prompt      String
+  optionA     String
+  optionB     String
+  optionC     String
+  optionD     String
+  correctOption String
+  explanation String
+  scene       Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sceneId])
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String?
+  isPremium  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
