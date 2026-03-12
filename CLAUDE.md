@@ -1,57 +1,21 @@
 # CLAUDE.md
 
-このファイルは Claude Code がこのリポジトリで作業する際のガイドラインです。
-
 ## プロジェクト概要
 
-**Shogun Story Academy** — 英語学習者向けに日本の侍文化・戦国時代を短編ストーリーで学べる教育プラットフォーム。
+**shogun-story-academy** — Next.js 14 (App Router) で構築したストーリー学習プラットフォーム。Stripe による課金・サブスクリプション管理と NextAuth v5 による認証を備える。
 
 ## 技術スタック
 
-| 分類 | 技術 |
-|---|---|
-| フレームワーク | Next.js 14 (App Router) |
-| 言語 | TypeScript |
-| スタイル | Tailwind CSS v4 |
-| 認証 | NextAuth.js v5 (Google OAuth) |
-| DB | Prisma 5 + libSQL (開発: SQLite, 本番: Turso) |
-| 課金 | Stripe (月額 $7 / 年額 $49) |
-| デプロイ | Vercel |
-
-## 開発コマンド
-
-```bash
-npm run dev          # 開発サーバー起動 (0.0.0.0:3000)
-npm run build        # 本番ビルド
-npm run lint         # ESLint
-npx tsc --noEmit     # 型チェック
-
-npm run db:push      # DBスキーマ適用
-npm run db:seed      # サンプルデータ投入
-npm run db:studio    # Prisma Studio 起動
-```
-
-## 環境変数
-
-`.env.local` に以下を設定（`.env.local` は `.gitignore` 済み）：
-
-```
-DATABASE_URL=file:./dev.db          # 開発用
-DATABASE_AUTH_TOKEN=                # Turso 本番用のみ
-
-AUTH_SECRET=
-AUTH_GOOGLE_ID=
-AUTH_GOOGLE_SECRET=
-
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_PUBLISHABLE_KEY=pk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-STRIPE_MONTHLY_PRICE_ID=price_...
-STRIPE_ANNUAL_PRICE_ID=price_...
-
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-```
+|カテゴリ   |採用技術                                     |
+|-------|-----------------------------------------|
+|フレームワーク|Next.js 14 (App Router)                  |
+|言語     |TypeScript                               |
+|スタイリング |Tailwind CSS v4                          |
+|認証     |NextAuth v5 (beta) + @auth/prisma-adapter|
+|DB     |Prisma + libSQL (@libsql/client)         |
+|決済     |Stripe                                   |
+|デプロイ   |Vercel                                   |
+|CI     |GitHub Actions (lint + 型チェック / deploy)   |
 
 ## ディレクトリ構成
 
@@ -59,60 +23,187 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 src/
 ├── app/
 │   ├── api/
-│   │   ├── auth/[...nextauth]/   # NextAuth ハンドラ
-│   │   ├── stripe/checkout/      # Stripe Checkout セッション作成
-│   │   ├── stripe/portal/        # Stripe 請求ポータル
-│   │   └── webhook/stripe/       # Stripe Webhook 処理
+│   │   ├── auth/[...nextauth]/   # 認証エンドポイント
+│   │   ├── stripe/checkout/      # チェックアウトセッション作成
+│   │   ├── stripe/portal/        # カスタマーポータル
+│   │   └── webhook/stripe/       # Stripe Webhook 受信
 │   ├── stories/
-│   │   ├── [slug]/page.tsx       # ストーリー詳細（認証・課金ゲート付き）
+│   │   ├── [slug]/page.tsx       # ストーリー詳細
 │   │   └── page.tsx              # ストーリー一覧
-│   ├── pricing/page.tsx          # 料金ページ
-│   ├── layout.tsx
+│   ├── pricing/page.tsx
 │   └── page.tsx                  # ホーム
-├── components/
-│   └── Navigation.tsx            # ナビゲーション（Server Component）
+├── components/                   # 共通UIコンポーネント
 └── lib/
     ├── auth.ts                   # NextAuth 設定
-    ├── prisma.ts                 # Prisma クライアント (libSQL アダプタ)
-    └── stripe.ts                 # Stripe クライアント + プラン定義
+    ├── prisma.ts                 # Prisma + libSQL クライアント
+    └── stripe.ts                 # Stripe クライアント
 prisma/
-├── schema.prisma                 # DB スキーマ
-└── seed.ts                       # サンプルストーリー 2 本
+├── schema.prisma
+└── seed.ts
 ```
 
-## DB スキーマの主要モデル
+## よく使うコマンド
 
-- `User` / `Account` / `Session` — NextAuth 管理
-- `Story` — ストーリー本文・isPremium フラグ
-- `VocabularyNote` — 語彙・文化的注記
-- `ComprehensionQuestion` — 理解度テスト（options は JSON 配列）
-- `TimelineEvent` — 年表イベント
-- `Subscription` — Stripe サブスクリプション状態（status: FREE / ACTIVE / CANCELED 等）
-- `StoryProgress` — ユーザーの読了記録
+```bash
+npm run dev          # 開発サーバー起動 (0.0.0.0)
+npm run build        # プロダクションビルド
+npm run lint         # ESLint
+npm run db:generate  # Prisma クライアント生成
+npm run db:push      # スキーマを DB に反映
+npm run db:seed      # シードデータ投入
+npm run db:studio    # Prisma Studio 起動
+```
 
-## 課金フロー
+## 個人開発成功事例から学ぶ戦略
 
-1. `/pricing` でプラン選択 → `POST /api/stripe/checkout`
-2. Stripe Checkout にリダイレクト
-3. 支払い完了 → Stripe Webhook (`/api/webhook/stripe`) が `Subscription` を更新
-4. `/stories` でプレミアムストーリーの表示可否を `subscription.status` で判定
+以下は、Postiz・Senja・Subscribr・Duolingoなど個人開発〜小規模チームで成功したアプリの事例を横断的にリサーチし、**このプロジェクトに適用できる共通成功因子**をまとめたものである。実装・意思決定の際は常にこのセクションを参照すること。
 
-## CI/CD
+### 成功因子①：ニッチ × トレンドの掛け合わせ
 
-- **PR → main**: GitHub Actions が型チェック + lint を実行
-- **main へのマージ**: GitHub Actions が Vercel に自動デプロイ
+- 成功したアプリは「広すぎないターゲット」かつ「今まさに需要が高まっているテーマ」を捉えている
+- 本プロジェクトへの適用: **「侍・日本文化に興味を持った海外ユーザー」×「Shogunブームで需要急増中」**という掛け合わせが最大の強み。このポジションを一貫して打ち出す
 
-必要な GitHub Secrets:
-- `VERCEL_TOKEN`
-- `VERCEL_ORG_ID`
-- `VERCEL_PROJECT_ID`
+### 成功因子②：ゲーミフィケーションと習慣化
 
-## 開発ブランチルール
+- Duolingoの最大の成功要因は「学習をゲームにしたこと」。ストリーク・XP・バッジが毎日開くモチベーションを生む
+- 本プロジェクトへの適用:
+  - 読書ストリーク（連続ログイン日数）を実装し、継続を可視化する
+  - ストーリー読了ごとにXPや達成バッジを付与する
+  - 学習進捗をSNSでシェアできるカード（OGP対応）を生成する
+  - 「今日のストーリー」など小さな日次目標でアプリを開く習慣をつくる
 
-- 作業ブランチは `claude/` プレフィックスを使用
-- `main` への直接プッシュは不可。PR 経由でマージする
+### 成功因子③：オンボーディングで「最初の価値」を即体験させる
 
-## コンテンツ追加方法
+- 成功アプリはサインアップ直後に「これは使える」と感じさせるまでの時間（Time to Value）を極限まで短縮している
+- 本プロジェクトへの適用:
+  - 登録直後に無料サンプルストーリーを即開放し、課金前に価値を体験させる
+  - オンボーディングは3ステップ以内に収める（登録→サンプル読む→課金CTA）
+  - チュートリアルよりも「いきなり読める」体験を優先する
 
-新しいストーリーは `prisma/seed.ts` または Prisma Studio で追加する。
-`isPremium: true` にするとプレミアム会員のみ閲覧可能になる。
+### 成功因子④：リテンション > 新規獲得
+
+- 成功している個人開発者は口を揃えて「獲得よりリテンションが全て」と言う
+- 本プロジェクトへの適用:
+  - 週次メールで「今週の新着ストーリー」を送り、離脱を防ぐ
+  - ストリークが途切れそうなユーザーへのリマインド通知を実装する
+  - 解約フローに「1ヶ月休止オプション」を設けてチャーンを抑制する
+
+### 成功因子⑤：コミュニティ主導の有機的成長
+
+- SenjaやPostizは「透明な成長記録の公開」と「コミュニティへの価値提供」で広告費ゼロで成長した
+- 本プロジェクトへの適用:
+  - Reddit（r/LearnJapanese, r/Shogun等）では宣伝ではなく「日本語Tips・侍文化コンテンツ」を投稿し、信頼を積み上げてからサービスへ誘導する
+  - 「build in public」スタイルでX/Twitterにサービスの成長過程を発信する
+  - ユーザーの学習成果（〇〇日達成！など）をシェアしやすくし、口コミを生む
+
+### 成功因子⑥：フリーミアムで入口を広げ、サブスクで収益化
+
+- 成功アプリの収益モデルは「無料で入ってもらい、価値を感じたら課金」がほぼ全て
+- 本プロジェクトへの適用:
+  - 無料枠は「体験には十分だが、続けるには物足りない」設計にする
+  - 課金の壁は「コンテンツ量の制限」で設ける（機能制限よりコンテンツ制限が離脱されにくい）
+  - 年払いオプションを用意し、月払いより20〜30%割引にしてLTVを上げる
+
+### 成功因子⑦：SEOをプロダクトに組み込む
+
+- 個人開発の成功者はSEOを「後から追加するもの」でなく「最初から設計するもの」として扱っている
+- 本プロジェクトへの適用:
+  - 各ストーリーページに独自のメタタグ・slug・構造化データを設定する
+  - 「learn Japanese through samurai stories」「Shogun Japanese learning」などの検索需要を狙ったコンテンツを意識的に作る
+  - ストーリーのタイトル・説明文はSEOキーワードを含めて書く
+
+## Claudeへの行動指針
+
+### 基本スタンス
+
+- **自律的に進める**。曖昧な点は自分でベストな判断をして実装し、判断の根拠を簡潔に添えること
+- 実装前に長々と確認しない。やってから報告する
+- 完了したら「何をしたか」「なぜそうしたか」を簡潔にまとめる
+
+### モバイルファースト
+
+- **スマホ画面を主戦場として設計する**。PCは二次対応
+- Tailwind のブレークポイントはモバイルから書く（`sm:` `md:` で上書き）
+- タップターゲットは最低44×44px確保する
+- フォント・行間はスマホの小画面で読みやすいサイズにする（本文16px以上）
+- ストーリーページは縦スクロールで快適に読めるレイアウトを優先する
+- フィードバックフォームやCTAボタンはスマホで片手操作しやすい位置・サイズにする
+- 不要なホバーエフェクトをメインのインタラクションにしない（タッチデバイスでは発火しない）
+- 実装後は必ずブラウザのデバイスエミュレータ（375px幅）で表示確認する
+- TypeScript strict モードを前提とする。`any` は使わない
+- コンポーネントは関数コンポーネント + Hooks のみ
+- Server Component をデフォルトとし、クライアント操作が必要な箇所のみ `"use client"` を付ける
+- Tailwind クラスで直接スタイルを当てる（CSS Modules は使わない）
+- `src/lib/prisma.ts` のクライアントを必ず使う（直接 `new PrismaClient()` しない）
+
+### 認証・決済まわりの注意点
+
+- NextAuth v5 beta の API を使うこと（v4 の記法と混在させない）
+- Stripe Webhook は必ず署名検証 (`stripe.webhooks.constructEvent`) を行う
+- 課金済みユーザーの判定ロジックは `src/lib/auth.ts` に集約する
+
+### DB変更時のフロー
+
+1. `prisma/schema.prisma` を編集
+1. `npm run db:push` でスキーマ反映
+1. 必要に応じて `seed.ts` も更新
+
+### セキュリティ
+
+- **認証チェックは必ずサーバーサイドで行う**。クライアント側の表示切り替えだけでアクセス制御したとみなさない
+- API Route では毎回 `auth()` でセッションを検証してから処理する
+- ユーザー入力は必ずバリデーション・サニタイズする（Prisma のパラメータバインディングを活用）
+- 環境変数のうち `NEXT_PUBLIC_` 以外はクライアントバンドルに含めない
+- Stripe Webhook は署名検証 (`stripe.webhooks.constructEvent`) を必ず行い、検証失敗時は 400 を返す
+- CSRF 対策として、状態変更を伴うリクエストは POST/PUT/DELETE のみ受け付ける
+- エラーレスポンスに内部情報（スタックトレース、DB構造）を含めない
+
+### マネタイズ方針
+
+- **課金ユーザーでなければコンテンツにアクセスさせない**。ゲートの実装漏れは絶対に作らない
+- 有料コンテンツへのアクセス制御は `src/lib/auth.ts` に集約し、各ページ・APIで必ず呼び出す
+- 無料→有料への導線（CTA）は常に意識してUIに組み込む。特にコンテンツ閲覧制限時は pricing ページへ誘導する
+- Stripe のサブスクリプションステータスは `active` のみ有効とみなす（`trialing` を許可する場合は明示的に判断する）
+- Webhook でサブスクリプション変更を受け取ったら即座に DB のステータスを更新する（ポーリングに頼らない）
+- 新機能を追加する際は「これが収益にどう貢献するか」を考慮して実装判断する
+
+### マーケティング・ユーザー獲得
+
+- SEO を常に意識する。ページには適切な `<title>`・`<meta description>`・OGP を必ず設定する
+- ストーリーページ（`/stories/[slug]`）は静的生成（SSG）またはISRにしてクローラーに最適化する
+- **Reddit を主要チャネルとして活用する**
+  - ターゲットsubreddit: r/LearnJapanese, r/japan, r/languagelearning, r/JLPT, r/Shogun, r/samurai, r/NetflixJapan など
+  - スパム投稿はせず、コミュニティに価値を提供する形で認知を広げる（学習Tips投稿、Q&A回答など）
+  - ランディングページやストーリーの無料サンプルをRedditで共有できる形にしておく
+- SNSシェアボタン・OGP画像をコンテンツページに組み込み、口コミ拡散を促す
+- 無料で体験できるコンテンツ（サンプルストーリーなど）を必ず用意し、登録・課金への導線を作る
+- Google Analytics または Vercel Analytics を組み込み、流入経路・コンバージョンを計測できる状態にする
+
+#### Shogunブームの活用（重要）
+
+- **ターゲットは海外ユーザー**。サイトは英語ベースで、日本語学習コンテンツを提供する立て付けにする
+- NetflixドラマShogunのシーズン2が制作決定しており、海外での侍・戦国文化への関心が高まっている。このトレンドを最大限活用する
+- コンテンツ・コピーライティングの方向性:
+  - 「Shogunのような世界を、日本語で読む」「侍の時代を日本語で体験する」など、ドラマファンに刺さる訴求を意識する
+  - ストーリーのテーマは戦国時代・侍・武士道など日本文化を前面に出す
+  - ランディングページのヒーローコピーもこの文脈で作る
+- SEOキーワードとして "learn Japanese", "samurai stories", "Japanese history", "Shogun Japanese" などを意識したメタタグ・コンテンツ構成にする
+- Shogunシーズン2の放映時期に合わせてコンテンツや施策を仕込んでおく（話題の波に乗る）
+
+### フィードバック収集
+
+- **フィードバック導線を必ずUIに組み込む**。実装して終わりにしない
+- 収集すべき場所と手段:
+  - ストーリー読了後 → 星評価 + 一言コメント（簡易フォーム）
+  - pricing ページ → 「どこで知りましたか？」などの簡単なアンケート
+  - 解約・退会フロー → 離脱理由の選択肢（Stripe カスタマーポータルと連携）
+- フィードバックデータはDBに保存し、管理者が確認できる状態にする
+- NPS（Net Promoter Score）的な「友人に勧めたいですか？(0〜10)」を定期的に出す仕組みを作る
+- Reddit・SNSでのユーザーの声（口コミ）も拾えるよう、サービス名やURLでのエゴサーチがしやすいOGP・メタ情報を整える
+- フィードバックUIは摩擦を最小限に。長いフォームは離脱率が高いので、1〜2タップで送れる設計にする
+
+### やってはいけないこと
+
+- `prisma/schema.prisma` を確認せずにDB関連のコードを書く
+- 環境変数をハードコードする（`.env.local` を参照すること）
+- `main` ブランチへの直接 push（PR経由を前提とする）
