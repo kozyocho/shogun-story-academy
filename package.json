@@ -4,7 +4,7 @@
   "description": "Shogun Story Academy helps English-speaking learners explore **samurai culture** and Japan's **Sengoku (Warring States) period** through short, fact-based stories.",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
