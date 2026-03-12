@@ -1,0 +1,46 @@
+{
+  "name": "shogun-story-academy",
+  "version": "1.0.0",
+  "description": "Shogun Story Academy helps English-speaking learners explore **samurai culture** and Japan's **Sengoku (Warring States) period** through short, fact-based stories.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:44543/git/kozyocho/shogun-story-academy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
+    "@prisma/client": "^5.22.0",
+    "@stripe/stripe-js": "^8.9.0",
+    "next": "^14.2.35",
+    "next-auth": "^5.0.0-beta.30",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^20.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.4.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.1.6",
+    "postcss": "^8.5.8",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^4.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
