@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +32,7 @@ interface Props {
 
 export default async function StoryPage({ params }: Props) {
   const { slug } = await params;
-  const session = await auth();
+  const user = await getUser();
 
   const story = await prisma.story.findUnique({
     where: { slug },
@@ -46,10 +46,10 @@ export default async function StoryPage({ params }: Props) {
   if (!story) notFound();
 
   if (story.isPremium) {
-    if (!session?.user?.id) redirect("/pricing");
+    if (!user?.id) redirect("/pricing");
 
     const subscription = await prisma.subscription.findUnique({
-      where: { userId: session.user.id },
+      where: { userId: user.id },
     });
     const isPremium =
       subscription?.status === "ACTIVE" ||

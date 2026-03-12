@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Stories",
@@ -16,15 +16,18 @@ export const metadata: Metadata = {
 };
 
 export default async function StoriesPage() {
-  const session = await auth();
+  const user = await getUser();
 
-  const subscription = session?.user?.id
+  const subscription = user?.id
     ? await prisma.subscription.findUnique({
-        where: { userId: session.user.id },
+        where: { userId: user.id },
       })
     : null;
 
-  const isPremium = subscription?.status === "ACTIVE" || subscription?.status === "TRIALING";
+  const isPremium =
+    subscription?.status === "ACTIVE" ||
+    subscription?.status === "TRIALING" ||
+    subscription?.status === "LIFETIME";
 
   const stories = await prisma.story.findMany({
     orderBy: [{ order: "asc" }, { publishedAt: "desc" }],
