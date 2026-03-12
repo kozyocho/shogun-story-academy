@@ -52,7 +52,9 @@ export default async function StoryPage({ params }: Props) {
       where: { userId: session.user.id },
     });
     const isPremium =
-      subscription?.status === "ACTIVE" || subscription?.status === "TRIALING";
+      subscription?.status === "ACTIVE" ||
+      subscription?.status === "TRIALING" ||
+      subscription?.status === "LIFETIME";
     if (!isPremium) redirect("/pricing");
   }
 

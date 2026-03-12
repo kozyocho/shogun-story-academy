@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { stripe, PLANS } from "@/lib/stripe";
+import { stripe, PLANS, type PlanKey } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
@@ -9,7 +9,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { plan } = await req.json() as { plan: "monthly" | "annual" };
+  const body = await req.json() as { plan: PlanKey };
+  const { plan } = body;
   const selectedPlan = PLANS[plan];
   if (!selectedPlan) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
@@ -39,17 +40,23 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const checkoutSession = await stripe.checkout.sessions.create({
+  const baseParams = {
     customer: customerId,
-    mode: "subscription",
-    payment_method_types: ["card"],
+    payment_method_types: ["card"] as const,
     line_items: [{ price: selectedPlan.priceId, quantity: 1 }],
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?success=true`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?canceled=true`,
-    subscription_data: {
-      metadata: { userId: session.user.id },
-    },
-  });
+    metadata: { userId: session.user.id },
+  };
+
+  const checkoutSession =
+    selectedPlan.mode === "payment"
+      ? await stripe.checkout.sessions.create({ ...baseParams, mode: "payment" })
+      : await stripe.checkout.sessions.create({
+          ...baseParams,
+          mode: "subscription",
+          subscription_data: { metadata: { userId: session.user.id } },
+        });
 
   return NextResponse.json({ url: checkoutSession.url });
 }
