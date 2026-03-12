@@ -38,6 +38,27 @@ Contributions are welcome. If you'd like to improve content quality, structure, 
 2. Submit a pull request with a clear summary of changes.
 3. Keep updates aligned with the content principles above.
 
+## Pricing Model
+
+Shogun Story Academy uses a **freemium + subscription** model.
+
+### Free Tier
+- Access to introductory chapters and a selection of sample stories
+- Basic cultural notes
+
+### Premium Tier
+- Full story library with all chapters
+- Vocabulary and cultural notes for every story
+- Timeline summaries and comprehension questions
+- New content added monthly
+
+| Plan | Price |
+|---|---|
+| Monthly | $7 / month |
+| Annual | $49 / year (save ~40%) |
+
+Payment is handled via **Stripe**.
+
 ## Status
 
 This repository is currently in the early setup stage.
