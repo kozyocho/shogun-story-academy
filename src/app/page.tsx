@@ -1,5 +1,24 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+
+export const metadata: Metadata = {
+  title: "Shogun Story Academy — Learn Samurai History Through Story",
+  description:
+    "Explore Japan's Sengoku period and samurai culture through short, fact-based stories written in clear English. Free to start.",
+  openGraph: {
+    title: "Shogun Story Academy — Learn Samurai History Through Story",
+    description:
+      "Explore Japan's Sengoku period and samurai culture through short, fact-based stories written in clear English.",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shogun Story Academy",
+    description:
+      "Learn samurai culture and Japan's Sengoku period through short, fact-based stories in English.",
+  },
+};
 
 export default async function HomePage() {
   const featuredStories = await prisma.story.findMany({

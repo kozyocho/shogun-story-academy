@@ -1,6 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+
+export const metadata: Metadata = {
+  title: "Stories",
+  description:
+    "Browse all samurai and Sengoku period stories. Free starter stories plus a premium library covering key battles, figures, and culture.",
+  openGraph: {
+    title: "Stories | Shogun Story Academy",
+    description:
+      "Browse all samurai and Sengoku period stories. Free and premium content.",
+    url: "/stories",
+  },
+};
 
 export default async function StoriesPage() {
   const session = await auth();

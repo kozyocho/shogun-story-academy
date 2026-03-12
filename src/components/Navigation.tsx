@@ -29,7 +29,7 @@ export async function Navigation() {
             >
               <button
                 type="submit"
-                className="bg-shogun-red hover:bg-red-800 px-3 py-1 rounded text-white transition-colors"
+                className="bg-shogun-red hover:bg-red-800 px-4 py-2 rounded text-white transition-colors min-h-[44px] min-w-[44px]"
               >
                 Sign out
               </button>
@@ -44,7 +44,7 @@ export async function Navigation() {
           >
             <button
               type="submit"
-              className="bg-shogun-gold hover:bg-yellow-500 text-shogun-dark px-4 py-1 rounded font-semibold transition-colors"
+              className="bg-shogun-gold hover:bg-yellow-500 text-shogun-dark px-4 py-2 rounded font-semibold transition-colors min-h-[44px] min-w-[44px]"
             >
               Sign in
             </button>

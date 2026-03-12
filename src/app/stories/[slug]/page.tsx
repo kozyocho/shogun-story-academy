@@ -1,9 +1,30 @@
+import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const story = await prisma.story.findUnique({ where: { slug } });
+  if (!story) return {};
+  return {
+    title: story.title,
+    description: story.summary,
+    openGraph: {
+      title: story.title,
+      description: story.summary,
+      url: `/stories/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: story.title,
+      description: story.summary,
+    },
+  };
+}
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -52,10 +73,11 @@ export default async function StoryPage({ params }: Props) {
         <p className="text-gray-600 mt-2 text-lg">{story.summary}</p>
       </header>
 
-      <div
-        className="prose prose-stone max-w-none leading-relaxed text-shogun-ink"
-        dangerouslySetInnerHTML={{ __html: story.content }}
-      />
+      <div className="prose prose-stone max-w-none leading-relaxed text-shogun-ink">
+        {story.content.split(/\n\n+/).map((para, i) => (
+          <p key={i}>{para.replace(/<[^>]*>/g, "").trim()}</p>
+        ))}
+      </div>
 
       {/* Timeline */}
       {story.timelineEvent && (
@@ -126,6 +148,28 @@ export default async function StoryPage({ params }: Props) {
           </div>
         </section>
       )}
+      {/* Share */}
+      <section className="mt-12 pt-8 border-t border-gray-200">
+        <p className="text-sm font-semibold text-shogun-ink mb-3">Share this story</p>
+        <div className="flex gap-3">
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${story.title}" — ${story.summary}`)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL ?? "https://shogun-story-academy.vercel.app"}/stories/${story.slug}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-sm font-medium min-h-[44px] hover:bg-gray-800 transition-colors"
+          >
+            𝕏 Share on X
+          </a>
+          <a
+            href={`https://www.reddit.com/submit?url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL ?? "https://shogun-story-academy.vercel.app"}/stories/${story.slug}`)}&title=${encodeURIComponent(story.title)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium min-h-[44px] hover:bg-orange-700 transition-colors"
+          >
+            Reddit
+          </a>
+        </div>
+      </section>
     </article>
   );
 }

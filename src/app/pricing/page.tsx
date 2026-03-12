@@ -35,7 +35,7 @@ export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const router = useRouter();
 
-  async function handleSubscribe(plan: string) {
+  async function handleSubscribe(plan: "monthly" | "annual") {
     setLoading(plan);
     try {
       const res = await fetch("/api/stripe/checkout", {
@@ -99,7 +99,7 @@ export default function PricingPage() {
               ))}
             </ul>
             <button
-              onClick={() => handleSubscribe(plan.key)}
+              onClick={() => handleSubscribe(plan.key as "monthly" | "annual")}
               disabled={loading === plan.key}
               className="w-full bg-shogun-red hover:bg-red-800 text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-60"
             >
