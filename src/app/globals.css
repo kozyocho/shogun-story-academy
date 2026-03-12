@@ -1,3 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-shogun-red: #9b2335;
+  --color-shogun-gold: #c9a84c;
+  --color-shogun-dark: #1a1a1a;
+  --color-shogun-ink: #2c2c2c;
+  --color-shogun-parchment: #f5f0e8;
+  --font-family-serif: Georgia, serif;
+}
