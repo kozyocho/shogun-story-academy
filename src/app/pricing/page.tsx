@@ -6,7 +6,7 @@ import type { PlanKey } from "@/lib/stripe";
 
 // ▼ 金額はここで一元管理。Stripeの Price と合わせて設定する。
 const MONTHLY_PRICE = 4.99; // USD / month
-const ANNUAL_PRICE = 49;   // USD / year
+const ANNUAL_PRICE = 39;   // USD / year
 const LIFETIME_PRICE = 98; // USD / one-time
 
 const annualSavingPct = Math.round((1 - ANNUAL_PRICE / (MONTHLY_PRICE * 12)) * 100);
