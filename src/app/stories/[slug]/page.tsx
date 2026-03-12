@@ -3,16 +3,10 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  const stories = await prisma.story.findMany({
-    where: { isPremium: false },
-    select: { slug: true },
-  });
-  return stories.map((s) => ({ slug: s.slug }));
 }
 
 export default async function StoryPage({ params }: Props) {

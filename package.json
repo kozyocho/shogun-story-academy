@@ -22,10 +22,11 @@
   "license": "ISC",
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
+    "@libsql/client": "^0.17.0",
+    "@prisma/adapter-libsql": "^5.22.0",
     "@prisma/client": "^5.22.0",
     "@stripe/stripe-js": "^8.9.0",
     "@tailwindcss/postcss": "^4.2.1",
-    "localtunnel": "^2.0.2",
     "next": "^14.2.35",
     "next-auth": "^5.0.0-beta.30",
     "react": "^18.3.1",
