@@ -1,55 +1,61 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { stripe, PLANS } from "@/lib/stripe";
+import { getUser } from "@/lib/auth";
+import { stripe, PLANS, type PlanKey } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
+  const user = await getUser();
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { plan } = await req.json() as { plan: "monthly" | "annual" };
+  const body = await req.json() as { plan: PlanKey };
+  const { plan } = body;
   const selectedPlan = PLANS[plan];
   if (!selectedPlan) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
   let subscription = await prisma.subscription.findUnique({
-    where: { userId: session.user.id },
+    where: { userId: user.id },
   });
 
   let customerId = subscription?.stripeCustomerId;
   if (!customerId) {
     const customer = await stripe.customers.create({
-      email: session.user.email!,
-      name: session.user.name ?? undefined,
-      metadata: { userId: session.user.id },
+      email: user.email!,
+      name: user.user_metadata?.full_name ?? undefined,
+      metadata: { userId: user.id },
     });
     customerId = customer.id;
 
     subscription = await prisma.subscription.upsert({
-      where: { userId: session.user.id },
+      where: { userId: user.id },
       update: { stripeCustomerId: customerId },
       create: {
-        userId: session.user.id,
+        userId: user.id,
         stripeCustomerId: customerId,
         status: "FREE",
       },
     });
   }
 
-  const checkoutSession = await stripe.checkout.sessions.create({
+  const commonParams = {
     customer: customerId,
-    mode: "subscription",
-    payment_method_types: ["card"],
     line_items: [{ price: selectedPlan.priceId, quantity: 1 }],
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?success=true`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?canceled=true`,
-    subscription_data: {
-      metadata: { userId: session.user.id },
-    },
-  });
+    metadata: { userId: user.id },
+  };
+
+  const checkoutSession =
+    selectedPlan.mode === "payment"
+      ? await stripe.checkout.sessions.create({ ...commonParams, mode: "payment" })
+      : await stripe.checkout.sessions.create({
+          ...commonParams,
+          mode: "subscription",
+          subscription_data: { metadata: { userId: user.id } },
+        });
 
   return NextResponse.json({ url: checkoutSession.url });
 }

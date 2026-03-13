@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
   }
 
   switch (event.type) {
+    // サブスクリプション（月額・年額）の作成・更新
     case "customer.subscription.created":
     case "customer.subscription.updated": {
       const sub = event.data.object as Stripe.Subscription;
@@ -31,7 +32,9 @@ export async function POST(req: NextRequest) {
           stripeSubscriptionId: sub.id,
           stripePriceId: sub.items.data[0].price.id,
           status: sub.status === "active" ? "ACTIVE" : sub.status.toUpperCase(),
-          currentPeriodEnd: new Date((sub as unknown as { current_period_end: number }).current_period_end * 1000),
+          currentPeriodEnd: new Date(
+            (sub as unknown as { current_period_end: number }).current_period_end * 1000
+          ),
         },
         create: {
           userId,
@@ -39,17 +42,43 @@ export async function POST(req: NextRequest) {
           stripeSubscriptionId: sub.id,
           stripePriceId: sub.items.data[0].price.id,
           status: sub.status === "active" ? "ACTIVE" : sub.status.toUpperCase(),
-          currentPeriodEnd: new Date((sub as unknown as { current_period_end: number }).current_period_end * 1000),
+          currentPeriodEnd: new Date(
+            (sub as unknown as { current_period_end: number }).current_period_end * 1000
+          ),
         },
       });
       break;
     }
 
+    // サブスクリプションのキャンセル
     case "customer.subscription.deleted": {
       const sub = event.data.object as Stripe.Subscription;
       await prisma.subscription.updateMany({
         where: { stripeSubscriptionId: sub.id },
         data: { status: "CANCELED", stripeSubscriptionId: null },
+      });
+      break;
+    }
+
+    // 買い切り（lifetime）の決済完了
+    case "checkout.session.completed": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      if (session.mode !== "payment") break;
+
+      const userId = session.metadata?.userId;
+      if (!userId) break;
+
+      await prisma.subscription.upsert({
+        where: { userId },
+        update: {
+          status: "LIFETIME",
+          stripeSubscriptionId: null,
+        },
+        create: {
+          userId,
+          stripeCustomerId: session.customer as string,
+          status: "LIFETIME",
+        },
       });
       break;
     }
