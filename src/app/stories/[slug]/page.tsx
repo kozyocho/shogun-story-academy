@@ -59,8 +59,8 @@ export default async function StoryPage({ params }: Props) {
   }
 
   return (
-    <article className="max-w-3xl mx-auto px-6 py-12">
-      <Link href="/stories" className="text-sm text-shogun-red hover:underline">
+    <article className="max-w-3xl mx-auto px-4 py-8 md:px-6 md:py-12">
+      <Link href="/stories" className="inline-block text-sm text-shogun-red hover:underline py-2 min-h-[44px] flex items-center">
         ← Back to Stories
       </Link>
 
@@ -71,7 +71,7 @@ export default async function StoryPage({ params }: Props) {
         {story.figure && (
           <span className="text-xs text-gray-500 ml-2">— {story.figure}</span>
         )}
-        <h1 className="text-3xl font-bold text-shogun-ink mt-2">{story.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-shogun-ink mt-2">{story.title}</h1>
         <p className="text-gray-600 mt-2 text-lg">{story.summary}</p>
       </header>
 
@@ -153,7 +153,7 @@ export default async function StoryPage({ params }: Props) {
       {/* Share */}
       <section className="mt-12 pt-8 border-t border-gray-200">
         <p className="text-sm font-semibold text-shogun-ink mb-3">Share this story</p>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <a
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${story.title}" — ${story.summary}`)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL ?? "https://shogun-story-academy.vercel.app"}/stories/${story.slug}`)}`}
             target="_blank"

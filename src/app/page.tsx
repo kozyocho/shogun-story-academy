@@ -30,24 +30,24 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-shogun-dark text-white py-24 px-6 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-shogun-gold mb-4">
+      <section className="bg-shogun-dark text-white py-16 md:py-24 px-4 text-center">
+        <h1 className="text-3xl md:text-5xl font-bold text-shogun-gold mb-4">
           Learn History Through Story
         </h1>
-        <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
+        <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto mb-8">
           Explore Japan&apos;s Sengoku period and samurai culture through short,
           fact-based stories written in clear English.
         </p>
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
           <Link
             href="/stories"
-            className="bg-shogun-gold text-shogun-dark px-6 py-3 rounded font-semibold hover:bg-yellow-500 transition-colors"
+            className="w-full sm:w-auto bg-shogun-gold text-shogun-dark px-6 py-3 rounded font-semibold hover:bg-yellow-500 transition-colors min-h-[44px] flex items-center justify-center"
           >
             Read Free Stories
           </Link>
           <Link
             href="/pricing"
-            className="border border-shogun-gold text-shogun-gold px-6 py-3 rounded hover:bg-shogun-gold hover:text-shogun-dark transition-colors"
+            className="w-full sm:w-auto border border-shogun-gold text-shogun-gold px-6 py-3 rounded hover:bg-shogun-gold hover:text-shogun-dark transition-colors min-h-[44px] flex items-center justify-center"
           >
             View Pricing
           </Link>
@@ -55,7 +55,7 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Stories */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
+      <section className="max-w-5xl mx-auto px-4 py-12 md:py-16">
         <h2 className="text-2xl font-bold text-shogun-ink mb-8 text-center">
           Free Stories to Get Started
         </h2>
@@ -88,8 +88,8 @@ export default async function HomePage() {
       </section>
 
       {/* Value Props */}
-      <section className="bg-white py-16 px-6">
-        <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-8 text-center">
+      <section className="bg-white py-12 md:py-16 px-4">
+        <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-6 text-center">
           {[
             {
               icon: "📜",
