@@ -3,6 +3,15 @@ const nextConfig = {
   experimental: {
     typedRoutes: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        pathname: "/wikipedia/commons/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

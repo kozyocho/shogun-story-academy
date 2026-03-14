@@ -16,6 +16,8 @@ async function main() {
     create: {
       slug: "the-battle-of-okehazama",
       title: "The Battle of Okehazama",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Oda_Nobunaga.jpg/480px-Oda_Nobunaga.jpg",
       summary:
         "In 1560, a young Oda Nobunaga faced an army ten times the size of his own. What happened next changed the course of Japanese history.",
       content: `In the summer of 1560, the warlord Imagawa Yoshimoto marched toward Kyoto with an army of over 25,000 men. Standing in his way was Oda Nobunaga, a young lord with fewer than 3,000 soldiers.
@@ -95,6 +97,8 @@ This victory made Nobunaga famous across Japan. It showed that boldness and timi
     create: {
       slug: "bushido-the-way-of-the-warrior",
       title: "Bushido: The Way of the Warrior",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Taira_no_Shigemori.jpg/480px-Taira_no_Shigemori.jpg",
       summary:
         "Honor, loyalty, and death without regret — the samurai code of Bushido shaped every aspect of a warrior's life, from the battlefield to the tea ceremony.",
       content: `The word "samurai" means "one who serves." But what a samurai served was not merely a lord — it was a code. That code was called Bushido: the Way of the Warrior.
@@ -177,6 +181,8 @@ Bushido did not disappear with the samurai class. In the early 20th century, wri
     create: {
       slug: "the-lone-samurai-miyamoto-musashi",
       title: "The Lone Samurai: Miyamoto Musashi",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Miyamoto_Musashi_-_Portrait.jpg/480px-Miyamoto_Musashi_-_Portrait.jpg",
       summary:
         "Miyamoto Musashi never lost a duel in over sixty fights. His approach to combat — and to life — still influences martial arts today.",
       content: `Miyamoto Musashi was born around 1584, near the end of the Sengoku period. He fought his first duel at age thirteen and never stopped.
@@ -236,6 +242,8 @@ In his later years, Musashi gave up dueling and turned to writing and painting. 
     create: {
       slug: "from-sandal-bearer-to-ruler-toyotomi-hideyoshi",
       title: "From Sandal-Bearer to Ruler: Toyotomi Hideyoshi",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Toyotomi_Hideyoshi.jpg/480px-Toyotomi_Hideyoshi.jpg",
       summary:
         "Born a peasant with no family name, Toyotomi Hideyoshi rose to become the most powerful man in Japan. His story is one of history's most remarkable ascents.",
       content: `In feudal Japan, your birth determined your destiny. Samurai were born samurai; peasants remained peasants. But Toyotomi Hideyoshi never accepted that rule.
@@ -317,6 +325,8 @@ He issued the Sword Hunt of 1588, confiscating weapons from peasants and fixing 
     create: {
       slug: "the-guns-of-nagashino",
       title: "The Guns of Nagashino",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Nagashino_Battle.jpg/480px-Nagashino_Battle.jpg",
       summary:
         "In 1575, Oda Nobunaga deployed 3,000 arquebusiers in rotating volleys against the legendary Takeda cavalry. It was the day samurai warfare changed forever.",
       content: `The Takeda cavalry were the most feared fighting force in Japan. Their armored horsemen had won battle after battle across the Sengoku period, and their reputation alone was enough to unsettle enemies.
@@ -400,6 +410,8 @@ Nagashino is remembered not just as a military victory, but as a turning point. 
     create: {
       slug: "the-battle-that-made-japan-sekigahara",
       title: "The Battle That Made Japan: Sekigahara",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Battle_of_Sekigahara.jpg/480px-Battle_of_Sekigahara.jpg",
       summary:
         "On October 21, 1600, two massive coalitions clashed in the fog of a mountain pass. When the battle ended six hours later, Tokugawa Ieyasu had won 250 years of peace.",
       content: `After the death of Toyotomi Hideyoshi in 1598, Japan's fragile unity began to fracture. Two factions emerged: those loyal to Hideyoshi's young heir, led by the administrator Ishida Mitsunari, and those who backed the powerful daimyo Tokugawa Ieyasu.

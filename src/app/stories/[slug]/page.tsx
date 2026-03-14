@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getUser } from "@/lib/auth";
@@ -89,7 +90,22 @@ export default async function StoryPage({ params }: Props) {
           ← Back to Stories
         </Link>
 
-        <header className="mt-6 mb-8">
+        {/* Hero image */}
+        {story.imageUrl && (
+          <div className="relative w-full h-52 md:h-72 rounded-xl overflow-hidden mt-6 bg-gray-100">
+            <Image
+              src={story.imageUrl}
+              alt={story.title}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="object-cover object-top"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          </div>
+        )}
+
+        <header className={`${story.imageUrl ? "mt-4" : "mt-6"} mb-8`}>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
               {story.era}
