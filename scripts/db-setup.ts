@@ -109,8 +109,15 @@ const statements = [
     ON "StoryProgress"("userId", "storyId")`,
 ];
 
-console.log("Setting up Turso database schema...");
-for (const sql of statements) {
-  await client.execute(sql);
+async function main() {
+  console.log("Setting up Turso database schema...");
+  for (const sql of statements) {
+    await client.execute(sql);
+  }
+  console.log("Database schema setup complete.");
 }
-console.log("Database schema setup complete.");
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
