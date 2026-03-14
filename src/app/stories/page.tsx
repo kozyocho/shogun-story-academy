@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getUser } from "@/lib/auth";
+import { TrainingStreakBadge } from "@/components/TrainingStreakBadge";
+import { RANK_NAMES } from "@/lib/ranks";
 
 export const metadata: Metadata = {
   title: "Stories",
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
 export default async function StoriesPage() {
   const user = await getUser();
 
-  const [subscription, progress] = await Promise.all([
+  const [subscription, progress, dbUser] = await Promise.all([
     user?.id
       ? prisma.subscription.findUnique({ where: { userId: user.id } })
       : null,
@@ -29,6 +31,12 @@ export default async function StoriesPage() {
           select: { storyId: true },
         })
       : [],
+    user?.id
+      ? prisma.user.findUnique({
+          where: { id: user.id },
+          select: { currentStreak: true, rank: true },
+        })
+      : null,
   ]);
 
   const completedIds = new Set(progress.map((p) => p.storyId));
@@ -48,9 +56,17 @@ export default async function StoriesPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:px-6 md:py-12">
       <h1 className="text-3xl font-bold text-shogun-ink mb-2">All Stories</h1>
-      <p className="text-gray-600 mb-10">
+      <p className="text-gray-600 mb-4">
         Explore Japan&apos;s Sengoku period through fact-based narratives.
       </p>
+
+      {/* Training streak + rank badge */}
+      {user?.id && (
+        <TrainingStreakBadge
+          streak={dbUser?.currentStreak ?? 0}
+          rankName={RANK_NAMES[dbUser?.rank ?? 0]}
+        />
+      )}
 
       {/* Free Stories */}
       <section className="mb-12">

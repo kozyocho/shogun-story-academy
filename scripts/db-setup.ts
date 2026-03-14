@@ -114,6 +114,20 @@ const statements = [
 // Each is wrapped in try/catch to be idempotent (column may already exist)
 const migrations = [
   `ALTER TABLE "Story" ADD COLUMN "imageUrl" TEXT`,
+  `ALTER TABLE "User" ADD COLUMN "busho" INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE "User" ADD COLUMN "rank" INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE "User" ADD COLUMN "currentStreak" INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE "User" ADD COLUMN "longestStreak" INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE "User" ADD COLUMN "lastReadAt" DATETIME`,
+  `CREATE TABLE IF NOT EXISTS "Scroll" (
+    "id"         TEXT NOT NULL PRIMARY KEY,
+    "userId"     TEXT NOT NULL,
+    "type"       TEXT NOT NULL,
+    "unlockedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "Scroll_userId_type_key"
+    ON "Scroll"("userId", "type")`,
 ];
 
 async function main() {
