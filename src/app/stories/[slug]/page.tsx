@@ -100,7 +100,7 @@ export default async function StoryPage({ params }: Props) {
               priority
               unoptimized
               sizes="(max-width: 768px) 100vw, 768px"
-              className="object-cover object-top"
+              className="object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           </div>

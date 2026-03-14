@@ -147,7 +147,7 @@ function StoryCard({
             fill
             unoptimized
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover object-top"
+            className="object-cover object-center"
           />
           {locked && (
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
