@@ -37,7 +37,7 @@ export default async function StoriesPage() {
   const premiumStories = stories.filter((s) => s.isPremium);
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 md:px-6 md:py-12">
       <h1 className="text-3xl font-bold text-shogun-ink mb-2">All Stories</h1>
       <p className="text-gray-600 mb-10">
         Explore Japan&apos;s Sengoku period through fact-based narratives.

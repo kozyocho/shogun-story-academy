@@ -11,12 +11,13 @@ export async function Navigation() {
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
   return (
-    <nav className="bg-shogun-dark text-white px-6 py-4 flex items-center justify-between">
-      <Link href="/" className="text-shogun-gold font-bold text-xl tracking-wide">
-        ⚔ Shogun Story Academy
+    <nav className="bg-shogun-dark text-white px-4 py-3 flex items-center justify-between gap-2">
+      <Link href="/" className="text-shogun-gold font-bold text-base sm:text-xl tracking-wide shrink-0">
+        <span className="sm:hidden">⚔ SSA</span>
+        <span className="hidden sm:inline">⚔ Shogun Story Academy</span>
       </Link>
 
-      <div className="flex items-center gap-6 text-sm">
+      <div className="flex items-center gap-3 sm:gap-5 text-sm">
         <Link href="/stories" className="hover:text-shogun-gold transition-colors">
           Stories
         </Link>
