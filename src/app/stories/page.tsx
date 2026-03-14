@@ -18,11 +18,19 @@ export const metadata: Metadata = {
 export default async function StoriesPage() {
   const user = await getUser();
 
-  const subscription = user?.id
-    ? await prisma.subscription.findUnique({
-        where: { userId: user.id },
-      })
-    : null;
+  const [subscription, progress] = await Promise.all([
+    user?.id
+      ? prisma.subscription.findUnique({ where: { userId: user.id } })
+      : null,
+    user?.id
+      ? prisma.storyProgress.findMany({
+          where: { userId: user.id, completed: true },
+          select: { storyId: true },
+        })
+      : [],
+  ]);
+
+  const completedIds = new Set(progress.map((p) => p.storyId));
 
   const isPremium =
     subscription?.status === "ACTIVE" ||
@@ -56,7 +64,12 @@ export default async function StoriesPage() {
             <p className="text-gray-500 col-span-2">Coming soon.</p>
           ) : (
             freeStories.map((story) => (
-              <StoryCard key={story.id} story={story} locked={false} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                locked={false}
+                completed={completedIds.has(story.id)}
+              />
             ))
           )}
         </div>
@@ -83,7 +96,12 @@ export default async function StoriesPage() {
             <p className="text-gray-500 col-span-2">Coming soon.</p>
           ) : (
             premiumStories.map((story) => (
-              <StoryCard key={story.id} story={story} locked={!isPremium} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                locked={!isPremium}
+                completed={completedIds.has(story.id)}
+              />
             ))
           )}
         </div>
@@ -95,6 +113,7 @@ export default async function StoriesPage() {
 function StoryCard({
   story,
   locked,
+  completed,
 }: {
   story: {
     id: string;
@@ -105,22 +124,30 @@ function StoryCard({
     figure: string | null;
   };
   locked: boolean;
+  completed: boolean;
 }) {
   const card = (
     <div
-      className={`p-5 rounded-lg border transition-shadow ${
+      className={`p-5 rounded-lg border transition-shadow relative ${
         locked
           ? "bg-gray-50 border-gray-200 opacity-75"
+          : completed
+          ? "bg-white border-green-300 hover:shadow-md cursor-pointer"
           : "bg-white border-gray-200 hover:shadow-md cursor-pointer"
       }`}
     >
+      {completed && (
+        <span className="absolute top-3 right-3 bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">
+          ✓ Done
+        </span>
+      )}
       <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
         {story.era}
       </span>
       {story.figure && (
         <span className="text-xs text-gray-500 ml-2">— {story.figure}</span>
       )}
-      <h3 className="text-base font-bold mt-1 mb-1 text-shogun-ink flex items-center gap-2">
+      <h3 className="text-base font-bold mt-1 mb-1 text-shogun-ink flex items-center gap-2 pr-14">
         {story.title}
         {locked && <span className="text-gray-400 text-sm">🔒</span>}
       </h3>
