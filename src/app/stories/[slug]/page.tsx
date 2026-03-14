@@ -98,6 +98,7 @@ export default async function StoryPage({ params }: Props) {
               alt={story.title}
               fill
               priority
+              unoptimized
               sizes="(max-width: 768px) 100vw, 768px"
               className="object-cover object-top"
             />
