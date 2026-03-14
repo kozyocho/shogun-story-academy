@@ -53,6 +53,7 @@ const statements = [
     "content"     TEXT NOT NULL,
     "era"         TEXT NOT NULL,
     "figure"      TEXT,
+    "imageUrl"    TEXT,
     "isPremium"   INTEGER NOT NULL DEFAULT 0,
     "order"       INTEGER NOT NULL DEFAULT 0,
     "publishedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -109,10 +110,25 @@ const statements = [
     ON "StoryProgress"("userId", "storyId")`,
 ];
 
+// Migration statements for adding columns to existing tables
+// Each is wrapped in try/catch to be idempotent (column may already exist)
+const migrations = [
+  `ALTER TABLE "Story" ADD COLUMN "imageUrl" TEXT`,
+];
+
 async function main() {
   console.log("Setting up Turso database schema...");
   for (const sql of statements) {
     await client.execute(sql);
+  }
+  console.log("Running migrations...");
+  for (const sql of migrations) {
+    try {
+      await client.execute(sql);
+      console.log(`Migration applied: ${sql.slice(0, 60)}...`);
+    } catch {
+      // Column likely already exists — safe to ignore
+    }
   }
   console.log("Database schema setup complete.");
 }
