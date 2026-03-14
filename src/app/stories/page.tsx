@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getUser } from "@/lib/auth";
@@ -122,13 +123,14 @@ function StoryCard({
     summary: string;
     era: string;
     figure: string | null;
+    imageUrl: string | null;
   };
   locked: boolean;
   completed: boolean;
 }) {
   const card = (
     <div
-      className={`p-5 rounded-lg border transition-shadow relative ${
+      className={`rounded-lg border transition-shadow relative overflow-hidden ${
         locked
           ? "bg-gray-50 border-gray-200 opacity-75"
           : completed
@@ -136,22 +138,44 @@ function StoryCard({
           : "bg-white border-gray-200 hover:shadow-md cursor-pointer"
       }`}
     >
-      {completed && (
-        <span className="absolute top-3 right-3 bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">
-          ✓ Done
+      {/* Cover image */}
+      {story.imageUrl && (
+        <div className="relative w-full h-36 sm:h-40 bg-gray-100">
+          <Image
+            src={story.imageUrl}
+            alt={story.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-top"
+          />
+          {locked && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <span className="text-white text-2xl">🔒</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="p-4">
+        {completed && (
+          <span className="absolute top-3 right-3 bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">
+            ✓ Done
+          </span>
+        )}
+        <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
+          {story.era}
         </span>
-      )}
-      <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
-        {story.era}
-      </span>
-      {story.figure && (
-        <span className="text-xs text-gray-500 ml-2">— {story.figure}</span>
-      )}
-      <h3 className="text-base font-bold mt-1 mb-1 text-shogun-ink flex items-center gap-2 pr-14">
-        {story.title}
-        {locked && <span className="text-gray-400 text-sm">🔒</span>}
-      </h3>
-      <p className="text-sm text-gray-600 line-clamp-2">{story.summary}</p>
+        {story.figure && (
+          <span className="text-xs text-gray-500 ml-2">— {story.figure}</span>
+        )}
+        <h3 className="text-base font-bold mt-1 mb-1 text-shogun-ink flex items-center gap-2 pr-14">
+          {story.title}
+          {locked && !story.imageUrl && (
+            <span className="text-gray-400 text-sm">🔒</span>
+          )}
+        </h3>
+        <p className="text-sm text-gray-600 line-clamp-2">{story.summary}</p>
+      </div>
     </div>
   );
 

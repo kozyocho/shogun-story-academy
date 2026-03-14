@@ -47,6 +47,7 @@ model Story {
   content     String
   era         String
   figure      String?
+  imageUrl    String?
   isPremium   Boolean  @default(false)
   order       Int      @default(0)
   publishedAt DateTime @default(now())
