@@ -145,6 +145,7 @@ function StoryCard({
             src={story.imageUrl}
             alt={story.title}
             fill
+            unoptimized
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover object-top"
           />

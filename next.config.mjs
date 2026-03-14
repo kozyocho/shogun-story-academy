@@ -10,6 +10,10 @@ const nextConfig = {
         hostname: "upload.wikimedia.org",
         pathname: "/wikipedia/commons/**",
       },
+      {
+        protocol: "https",
+        hostname: "commons.wikimedia.org",
+      },
     ],
   },
 };
