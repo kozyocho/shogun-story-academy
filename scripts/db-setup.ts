@@ -128,6 +128,19 @@ const migrations = [
   )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "Scroll_userId_type_key"
     ON "Scroll"("userId", "type")`,
+  `CREATE TABLE IF NOT EXISTS "StoryDecision" (
+    "id"             TEXT NOT NULL PRIMARY KEY,
+    "storyId"        TEXT NOT NULL,
+    "afterParagraph" INTEGER NOT NULL,
+    "question"       TEXT NOT NULL,
+    "optionA"        TEXT NOT NULL,
+    "optionB"        TEXT NOT NULL,
+    "optionC"        TEXT NOT NULL,
+    "correctOption"  INTEGER NOT NULL,
+    "historicalNote" TEXT NOT NULL,
+    "wrongNote"      TEXT NOT NULL,
+    FOREIGN KEY ("storyId") REFERENCES "Story"("id") ON DELETE CASCADE
+  )`,
 ];
 
 async function main() {

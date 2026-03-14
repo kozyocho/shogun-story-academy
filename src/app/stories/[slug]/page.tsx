@@ -5,7 +5,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getUser } from "@/lib/auth";
 import { ReadingProgressBar } from "@/components/story/ReadingProgressBar";
-import { AnimatedParagraphs } from "@/components/story/AnimatedParagraphs";
+import { StoryBody } from "@/components/story/StoryBody";
 import { VocabFlashcards } from "@/components/story/VocabFlashcards";
 import { VocabDojoGame } from "@/components/story/VocabDojoGame";
 import { QuizSection } from "@/components/story/QuizSection";
@@ -46,6 +46,7 @@ export default async function StoryPage({ params }: Props) {
       vocabulary: true,
       questions: true,
       timelineEvent: true,
+      decisions: { orderBy: { afterParagraph: "asc" } },
     },
   });
 
@@ -129,8 +130,8 @@ export default async function StoryPage({ params }: Props) {
           </p>
         </header>
 
-        {/* Animated story body */}
-        <AnimatedParagraphs paragraphs={paragraphs} />
+        {/* Animated story body with interleaved decision points */}
+        <StoryBody paragraphs={paragraphs} decisions={story.decisions} />
 
         {/* Timeline */}
         {story.timelineEvent && (
