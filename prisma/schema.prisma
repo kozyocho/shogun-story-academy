@@ -65,6 +65,7 @@ model Story {
   questions     ComprehensionQuestion[]
   progress      StoryProgress[]
   timelineEvent TimelineEvent?
+  decisions     StoryDecision[]
 }
 
 model StoryTag {
@@ -115,6 +116,21 @@ model Scroll {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, type])
+}
+
+model StoryDecision {
+  id             String @id @default(cuid())
+  storyId        String
+  afterParagraph Int
+  question       String
+  optionA        String
+  optionB        String
+  optionC        String
+  correctOption  Int
+  historicalNote String
+  wrongNote      String
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
 }
 
 model StoryProgress {

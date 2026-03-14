@@ -9,6 +9,23 @@ const adapter = new PrismaLibSQL(libsql);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  // Helper: upsert a decision for a story (idempotent via deleteMany + create)
+  async function upsertDecision(storySlug: string, data: {
+    afterParagraph: number;
+    question: string;
+    optionA: string;
+    optionB: string;
+    optionC: string;
+    correctOption: number;
+    historicalNote: string;
+    wrongNote: string;
+  }) {
+    const story = await prisma.story.findUnique({ where: { slug: storySlug }, select: { id: true } });
+    if (!story) return;
+    await prisma.storyDecision.deleteMany({ where: { storyId: story.id, afterParagraph: data.afterParagraph } });
+    await prisma.storyDecision.create({ data: { storyId: story.id, ...data } });
+  }
+
   // ── Story 1: Battle of Okehazama (FREE) ─────────────────────────────
   await prisma.story.upsert({
     where: { slug: "the-battle-of-okehazama" },
@@ -506,6 +523,80 @@ His dynasty would rule Japan for over 250 years, a period of enforced peace, rig
         ],
       },
     },
+  });
+
+  // ── Decision Points ──────────────────────────────────────────────────
+
+  // Story 1: Battle of Okehazama
+  await upsertDecision("the-battle-of-okehazama", {
+    afterParagraph: 1,
+    question: "You are Oda Nobunaga. Imagawa's army is 10 times your size, resting in a gorge during a sudden storm. What do you do?",
+    optionA: "Hold your castle walls and defend",
+    optionB: "Retreat and send a peace envoy",
+    optionC: "Strike NOW — charge into the storm",
+    correctOption: 2,
+    historicalNote: "Nobunaga did exactly this. Historians call it one of history's great gambles — the storm masked his approach and killed enemy visibility. His decisive strike killed Yoshimoto himself, collapsing the invasion.",
+    wrongNote: "Most commanders would have. But Nobunaga chose the impossible option — a direct charge into a superior force during a storm. It was the gamble that launched his rise to power.",
+  });
+
+  // Story 2: Bushido
+  await upsertDecision("bushido-the-way-of-the-warrior", {
+    afterParagraph: 2,
+    question: "A samurai has been captured. He is offered a chance to escape — but only by abandoning his lord. What should he do?",
+    optionA: "Escape — survival serves the lord better",
+    optionB: "Perform seppuku — die with honor",
+    optionC: "Negotiate surrender terms to buy time",
+    correctOption: 1,
+    historicalNote: "Under Bushido, death with honor was always preferred to survival through compromise. The samurai's life belonged to his lord and his code — not to himself.",
+    wrongNote: "Bushido rejected this reasoning. The code held that a warrior who compromised his honor to survive had already ceased to be a samurai.",
+  });
+
+  // Story 3: Miyamoto Musashi
+  await upsertDecision("the-lone-samurai-miyamoto-musashi", {
+    afterParagraph: 1,
+    question: "Musashi is hours late to his duel with Kojiro. Kojiro is furious. Musashi holds only a wooden sword he carved from an oar. What is his strategy?",
+    optionA: "Apologize and ask to reschedule",
+    optionB: "Use Kojiro's anger against him — attack immediately",
+    optionC: "Request a real sword before fighting",
+    correctOption: 1,
+    historicalNote: "Musashi arrived late deliberately — to destabilize Kojiro emotionally. He then struck before Kojiro could recover his composure. The duel lasted moments.",
+    wrongNote: "Musashi never apologized for an advantage. He arrived late on purpose, knowing fury clouds judgment. His weapon was psychological before the first blow was struck.",
+  });
+
+  // Story 4: Toyotomi Hideyoshi
+  await upsertDecision("from-sandal-bearer-to-ruler-toyotomi-hideyoshi", {
+    afterParagraph: 2,
+    question: "After Nobunaga's assassination, you are Hideyoshi — a general with no royal blood. How do you claim leadership of Japan?",
+    optionA: "Declare yourself regent and demand loyalty",
+    optionB: "Avenge Nobunaga first, then build political power from that loyalty",
+    optionC: "Retire — a peasant cannot rule Japan",
+    correctOption: 1,
+    historicalNote: "Hideyoshi moved faster than any rival to avenge Nobunaga. By doing so publicly, he positioned himself as the legitimate heir to Nobunaga's legacy — giving him the political capital to seize power.",
+    wrongNote: "Without noble blood, Hideyoshi needed a different kind of legitimacy. Avenging Nobunaga was his answer — loyalty made visible through action, not words.",
+  });
+
+  // Story 5: Battle of Nagashino
+  await upsertDecision("the-guns-of-nagashino", {
+    afterParagraph: 1,
+    question: "The Takeda cavalry — Japan's most feared force — is charging at you. Your arquebusiers each take 30 seconds to reload. How do you deploy them?",
+    optionA: "Charge the cavalry before they reach your line",
+    optionB: "Arrange gunners in rotating firing lines — one group always fires while others reload",
+    optionC: "Use archers instead — they reload faster",
+    correctOption: 1,
+    historicalNote: "Nobunaga's rotating volley system meant the Takeda cavalry faced near-continuous gunfire. It had never been used in Japan before — and it was devastating. The Takeda never recovered.",
+    wrongNote: "Nobunaga thought differently. Instead of solving the reload problem for one gunner, he solved it across the entire formation — creating a continuous wall of fire no cavalry could cross.",
+  });
+
+  // Story 6: Battle of Sekigahara
+  await upsertDecision("the-battle-that-made-japan-sekigahara", {
+    afterParagraph: 1,
+    question: "You are Tokugawa Ieyasu. The Western Army outnumbers you. In the months before battle, what is your most important move?",
+    optionA: "Build fortifications along the likely battle route",
+    optionB: "Secretly negotiate with Western Army generals — promise them land to switch sides",
+    optionC: "Recruit foreign mercenaries with better weapons",
+    correctOption: 1,
+    historicalNote: "Ieyasu spent the months before Sekigahara in secret diplomacy. When Kobayakawa Hideaki switched sides mid-battle, the Western Army collapsed from within — exactly as Ieyasu had arranged.",
+    wrongNote: "Ieyasu understood: battles are decided before they begin. His weapon was not the sword but the deal made in private — the betrayal planned months in advance.",
   });
 
   console.log("Seed complete. 6 stories upserted.");
