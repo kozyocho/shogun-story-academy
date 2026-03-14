@@ -12,7 +12,10 @@ async function main() {
   // ── Story 1: Battle of Okehazama (FREE) ─────────────────────────────
   await prisma.story.upsert({
     where: { slug: "the-battle-of-okehazama" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Oda_Nobunaga.jpg/480px-Oda_Nobunaga.jpg",
+    },
     create: {
       slug: "the-battle-of-okehazama",
       title: "The Battle of Okehazama",
@@ -93,7 +96,10 @@ This victory made Nobunaga famous across Japan. It showed that boldness and timi
   // ── Story 2: Bushido (FREE) ──────────────────────────────────────────
   await prisma.story.upsert({
     where: { slug: "bushido-the-way-of-the-warrior" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Taira_no_Shigemori.jpg/480px-Taira_no_Shigemori.jpg",
+    },
     create: {
       slug: "bushido-the-way-of-the-warrior",
       title: "Bushido: The Way of the Warrior",
@@ -177,7 +183,10 @@ Bushido did not disappear with the samurai class. In the early 20th century, wri
   // ── Story 3: Miyamoto Musashi (PREMIUM) ─────────────────────────────
   await prisma.story.upsert({
     where: { slug: "the-lone-samurai-miyamoto-musashi" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Miyamoto_Musashi_-_Portrait.jpg/480px-Miyamoto_Musashi_-_Portrait.jpg",
+    },
     create: {
       slug: "the-lone-samurai-miyamoto-musashi",
       title: "The Lone Samurai: Miyamoto Musashi",
@@ -238,7 +247,10 @@ In his later years, Musashi gave up dueling and turned to writing and painting. 
   // ── Story 4: Toyotomi Hideyoshi (PREMIUM) ───────────────────────────
   await prisma.story.upsert({
     where: { slug: "from-sandal-bearer-to-ruler-toyotomi-hideyoshi" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Toyotomi_Hideyoshi.jpg/480px-Toyotomi_Hideyoshi.jpg",
+    },
     create: {
       slug: "from-sandal-bearer-to-ruler-toyotomi-hideyoshi",
       title: "From Sandal-Bearer to Ruler: Toyotomi Hideyoshi",
@@ -321,7 +333,10 @@ He issued the Sword Hunt of 1588, confiscating weapons from peasants and fixing 
   // ── Story 5: Battle of Nagashino (PREMIUM) ──────────────────────────
   await prisma.story.upsert({
     where: { slug: "the-guns-of-nagashino" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Nagashino_Battle.jpg/480px-Nagashino_Battle.jpg",
+    },
     create: {
       slug: "the-guns-of-nagashino",
       title: "The Guns of Nagashino",
@@ -406,7 +421,10 @@ Nagashino is remembered not just as a military victory, but as a turning point. 
   // ── Story 6: Battle of Sekigahara (PREMIUM) ─────────────────────────
   await prisma.story.upsert({
     where: { slug: "the-battle-that-made-japan-sekigahara" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Battle_of_Sekigahara.jpg/480px-Battle_of_Sekigahara.jpg",
+    },
     create: {
       slug: "the-battle-that-made-japan-sekigahara",
       title: "The Battle That Made Japan: Sekigahara",
