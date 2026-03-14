@@ -7,6 +7,7 @@ import { getUser } from "@/lib/auth";
 import { ReadingProgressBar } from "@/components/story/ReadingProgressBar";
 import { AnimatedParagraphs } from "@/components/story/AnimatedParagraphs";
 import { VocabFlashcards } from "@/components/story/VocabFlashcards";
+import { VocabDojoGame } from "@/components/story/VocabDojoGame";
 import { QuizSection } from "@/components/story/QuizSection";
 
 export const dynamic = "force-dynamic";
@@ -154,6 +155,17 @@ export default async function StoryPage({ params }: Props) {
             </h2>
             <VocabFlashcards items={story.vocabulary} />
           </section>
+        )}
+
+        {/* Vocab dojo matching game */}
+        {story.vocabulary.length >= 2 && (
+          <VocabDojoGame
+            items={story.vocabulary.map((v) => ({
+              id: v.id,
+              term: v.term,
+              definition: v.definition,
+            }))}
+          />
         )}
 
         {/* Interactive quiz */}
