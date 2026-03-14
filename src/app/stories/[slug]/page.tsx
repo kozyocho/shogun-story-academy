@@ -7,8 +7,7 @@ import { getUser } from "@/lib/auth";
 import { ReadingProgressBar } from "@/components/story/ReadingProgressBar";
 import { StoryBody } from "@/components/story/StoryBody";
 import { VocabFlashcards } from "@/components/story/VocabFlashcards";
-import { VocabDojoGame } from "@/components/story/VocabDojoGame";
-import { QuizSection } from "@/components/story/QuizSection";
+import { GameSection } from "@/components/story/GameSection";
 
 export const dynamic = "force-dynamic";
 
@@ -158,33 +157,18 @@ export default async function StoryPage({ params }: Props) {
           </section>
         )}
 
-        {/* Vocab dojo matching game */}
-        {story.vocabulary.length >= 2 && (
-          <VocabDojoGame
-            items={story.vocabulary.map((v) => ({
-              id: v.id,
-              term: v.term,
-              definition: v.definition,
-            }))}
-          />
-        )}
-
-        {/* Interactive quiz */}
-        {quizQuestions.length > 0 && (
-          <section className="mt-10">
-            <h2 className="text-xl font-bold text-shogun-ink mb-1">
-              Comprehension Quiz
-            </h2>
-            <p className="text-xs text-gray-400 mb-4">
-              Test your understanding — tap an option to answer
-            </p>
-            <QuizSection
-              questions={quizQuestions}
-              storyId={story.id}
-              userId={user?.id}
-            />
-          </section>
-        )}
+        {/* Vocab dojo + duel system */}
+        <GameSection
+          vocabItems={story.vocabulary.map((v) => ({
+            id: v.id,
+            term: v.term,
+            definition: v.definition,
+          }))}
+          questions={quizQuestions}
+          storyId={story.id}
+          userId={user?.id}
+          figure={story.figure}
+        />
 
         {/* Share */}
         <section className="mt-12 pt-8 border-t border-gray-200">

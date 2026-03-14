@@ -21,6 +21,9 @@ export async function Navigation() {
         <Link href="/stories" className="hover:text-shogun-gold transition-colors">
           Stories
         </Link>
+        <Link href="/map" className="hover:text-shogun-gold transition-colors">
+          Map
+        </Link>
         <Link href="/pricing" className="hover:text-shogun-gold transition-colors">
           Pricing
         </Link>
