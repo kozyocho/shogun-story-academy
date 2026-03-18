@@ -58,9 +58,10 @@ export default async function StoriesPage() {
   const dayOfYear = Math.floor(
     (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000
   );
-  const dailyStory = stories[dayOfYear % stories.length];
-  const dailyCompleted = completedIds.has(dailyStory.id);
-  const dailyLocked = dailyStory.isPremium && !isPremium;
+  const dailyStory = stories.length > 0 ? stories[dayOfYear % stories.length] : null;
+  const dailyCompleted = dailyStory ? completedIds.has(dailyStory.id) : false;
+  const dailyLocked = dailyStory ? dailyStory.isPremium && !isPremium : false;
+  console.log("dailyStory:", dailyStory?.title, "dailyCompleted:", dailyCompleted);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:px-6 md:py-12">
@@ -70,7 +71,7 @@ export default async function StoriesPage() {
       </p>
 
       {/* Daily Challenge */}
-      <section className="mb-10 mt-6">
+      {dailyStory && <section className="mb-10 mt-6">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">🔥</span>
           <h2 className="text-base font-bold text-shogun-ink uppercase tracking-wider">
@@ -154,7 +155,7 @@ export default async function StoriesPage() {
             </div>
           </Link>
         )}
-      </section>
+      </section>}
 
       {/* Training streak + rank badge */}
       {user?.id && (
