@@ -10,7 +10,7 @@ import {
   ZoomableGroup,
 } from "react-simple-maps";
 
-const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const GEO_URL = "https://raw.githubusercontent.com/dataofjapan/land/master/japan.geojson";
 
 type Story = {
   id: string;
@@ -84,22 +84,20 @@ export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
           >
             <Geographies geography={GEO_URL}>
               {({ geographies }) =>
-                geographies
-                  .filter((geo) => geo.properties.name === "Japan")
-                  .map((geo) => (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill="#8B6914"
-                      stroke="#5C3D1E"
-                      strokeWidth={0.8}
-                      style={{
-                        default: { fill: "#8B6914", outline: "none" },
-                        hover:   { fill: "#8B6914", outline: "none" },
-                        pressed: { fill: "#8B6914", outline: "none" },
-                      }}
-                    />
-                  ))
+                geographies.map((geo) => (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill="#8B6914"
+                    stroke="#5C3D1E"
+                    strokeWidth={0.3}
+                    style={{
+                      default: { fill: "#8B6914", outline: "none" },
+                      hover:   { fill: "#8B6914", outline: "none" },
+                      pressed: { fill: "#8B6914", outline: "none" },
+                    }}
+                  />
+                ))
               }
             </Geographies>
 
