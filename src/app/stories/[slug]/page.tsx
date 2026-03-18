@@ -64,6 +64,8 @@ export default async function StoryPage({ params }: Props) {
 
   const isLocked = story.isPremium && !isPremiumUser;
 
+  console.log("[StoryPage] slug:", slug, "| isPremium:", story.isPremium, "| isPremiumUser:", isPremiumUser, "| isLocked:", isLocked);
+
   const totalStories = await prisma.story.count();
 
   const paragraphs = story.content
@@ -139,7 +141,7 @@ export default async function StoryPage({ params }: Props) {
         />
 
         {isLocked && (
-          <div className="relative -mt-32">
+          <div className="relative z-10 -mt-32">
             <div className="h-32 bg-gradient-to-b from-transparent to-white" />
             <div className="bg-white pt-4 pb-10 text-center px-4">
               <p className="text-2xl mb-2">⚔</p>
