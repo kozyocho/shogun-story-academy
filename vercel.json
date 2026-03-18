@@ -1,5 +1,5 @@
 {
-  "buildCommand": "prisma generate && next build",
+  "buildCommand": "prisma generate && tsx scripts/db-setup.ts && tsx prisma/seed.ts && next build",
   "installCommand": "npm install",
   "framework": "nextjs"
 }

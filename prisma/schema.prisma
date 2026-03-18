@@ -13,15 +13,21 @@ datasource db {
 
 // User.id = Supabase Auth UUID (no default — set at sign-in callback)
 model User {
-  id        String   @id
-  email     String   @unique
-  name      String?
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id
+  email         String    @unique
+  name          String?
+  image         String?
+  busho         Int       @default(0)
+  rank          Int       @default(0)
+  currentStreak Int       @default(0)
+  longestStreak Int       @default(0)
+  lastReadAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   subscription Subscription?
   progress     StoryProgress[]
+  scrolls      Scroll[]
 }
 
 model Subscription {
@@ -47,6 +53,7 @@ model Story {
   content     String
   era         String
   figure      String?
+  imageUrl    String?
   isPremium   Boolean  @default(false)
   order       Int      @default(0)
   publishedAt DateTime @default(now())
@@ -58,6 +65,7 @@ model Story {
   questions     ComprehensionQuestion[]
   progress      StoryProgress[]
   timelineEvent TimelineEvent?
+  decisions     StoryDecision[]
 }
 
 model StoryTag {
@@ -95,6 +103,32 @@ model TimelineEvent {
   year        Int
   title       String
   description String
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+}
+
+model Scroll {
+  id         String   @id @default(cuid())
+  userId     String
+  type       String
+  unlockedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+}
+
+model StoryDecision {
+  id             String @id @default(cuid())
+  storyId        String
+  afterParagraph Int
+  question       String
+  optionA        String
+  optionB        String
+  optionC        String
+  correctOption  Int
+  historicalNote String
+  wrongNote      String
 
   story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
 }

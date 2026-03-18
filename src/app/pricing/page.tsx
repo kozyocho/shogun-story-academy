@@ -82,7 +82,7 @@ export default function PricingPage() {
       });
 
       if (res.status === 401) {
-        router.push("/api/auth/signin");
+        window.location.href = "/api/auth/signin";
         return;
       }
 

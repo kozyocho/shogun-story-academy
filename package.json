@@ -11,7 +11,8 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:setup": "tsx scripts/db-setup.ts"
   },
   "repository": {
     "type": "git",
@@ -31,15 +32,17 @@
     "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-simple-maps": "^3.0.0",
     "stripe": "^20.4.1"
   },
   "devDependencies": {
     "@types/node": "^25.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/react-simple-maps": "^3.0.6",
     "autoprefixer": "^10.4.27",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "^16.1.6",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
     "postcss": "^8.5.8",
     "prisma": "^5.22.0",
     "tailwindcss": "^4.2.1",

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getUser } from "@/lib/auth";
+import { TrainingStreakBadge } from "@/components/TrainingStreakBadge";
+import { RANK_NAMES } from "@/lib/ranks";
 
 export const metadata: Metadata = {
   title: "Stories",
@@ -18,11 +21,25 @@ export const metadata: Metadata = {
 export default async function StoriesPage() {
   const user = await getUser();
 
-  const subscription = user?.id
-    ? await prisma.subscription.findUnique({
-        where: { userId: user.id },
-      })
-    : null;
+  const [subscription, progress, dbUser] = await Promise.all([
+    user?.id
+      ? prisma.subscription.findUnique({ where: { userId: user.id } })
+      : null,
+    user?.id
+      ? prisma.storyProgress.findMany({
+          where: { userId: user.id, completed: true },
+          select: { storyId: true },
+        })
+      : [],
+    user?.id
+      ? prisma.user.findUnique({
+          where: { id: user.id },
+          select: { currentStreak: true, rank: true },
+        })
+      : null,
+  ]);
+
+  const completedIds = new Set(progress.map((p) => p.storyId));
 
   const isPremium =
     subscription?.status === "ACTIVE" ||
@@ -36,12 +53,117 @@ export default async function StoriesPage() {
   const freeStories = stories.filter((s) => !s.isPremium);
   const premiumStories = stories.filter((s) => s.isPremium);
 
+  // 今日の日付からデイリーストーリーを決定（日付ベースのローテーション）
+  const today = new Date();
+  const dayOfYear = Math.floor(
+    (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000
+  );
+  const dailyStory = stories.length > 0 ? stories[dayOfYear % stories.length] : null;
+  const dailyCompleted = dailyStory ? completedIds.has(dailyStory.id) : false;
+  const dailyLocked = dailyStory ? dailyStory.isPremium && !isPremium : false;
+  console.log("dailyStory:", dailyStory?.title, "dailyCompleted:", dailyCompleted);
+
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 md:px-6 md:py-12">
       <h1 className="text-3xl font-bold text-shogun-ink mb-2">All Stories</h1>
-      <p className="text-gray-600 mb-10">
+      <p className="text-gray-600 mb-4">
         Explore Japan&apos;s Sengoku period through fact-based narratives.
       </p>
+
+      {/* Daily Challenge */}
+      {dailyStory && <section className="mb-10 mt-6">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">🔥</span>
+          <h2 className="text-base font-bold text-shogun-ink uppercase tracking-wider">
+            Today&apos;s Challenge
+          </h2>
+          {dbUser && dbUser.currentStreak > 0 && (
+            <span className="text-xs bg-orange-100 text-orange-600 font-bold px-2 py-0.5 rounded-full">
+              {dbUser.currentStreak} day streak
+            </span>
+          )}
+        </div>
+
+        {dailyLocked ? (
+          <div className="relative rounded-xl overflow-hidden border border-yellow-200 bg-yellow-50">
+            <div className="p-5">
+              <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
+                {dailyStory.era}
+              </span>
+              <h3 className="text-lg font-bold text-shogun-ink mt-1 mb-1">
+                {dailyStory.title}
+              </h3>
+              <p className="text-sm text-gray-500 line-clamp-2 mb-4">
+                {dailyStory.summary}
+              </p>
+              <Link
+                href="/pricing"
+                className="inline-block bg-shogun-gold text-shogun-dark font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-yellow-500 transition-colors"
+              >
+                Unlock with Premium →
+              </Link>
+            </div>
+            <div className="absolute top-3 right-3 text-2xl">🔒</div>
+          </div>
+        ) : dailyCompleted ? (
+          <div className="rounded-xl border border-green-200 bg-green-50 p-5 flex items-center gap-4">
+            <div className="text-4xl">✅</div>
+            <div>
+              <p className="font-bold text-green-700">Today&apos;s challenge complete!</p>
+              <p className="text-sm text-green-600 mt-0.5">
+                {dailyStory.title} — Come back tomorrow for a new story.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <Link href={`/stories/${dailyStory.slug}`}>
+            <div className="rounded-xl overflow-hidden border-2 border-shogun-gold bg-white hover:shadow-lg transition-shadow cursor-pointer">
+              {dailyStory.imageUrl && (
+                <div className="relative w-full h-40 bg-gray-100">
+                  <Image
+                    src={dailyStory.imageUrl}
+                    alt={dailyStory.title}
+                    fill
+                    unoptimized
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute bottom-3 left-4">
+                    <span className="text-xs text-white/80 uppercase tracking-wider font-semibold">
+                      {dailyStory.era}
+                    </span>
+                  </div>
+                </div>
+              )}
+              <div className="p-4">
+                <h3 className="text-lg font-bold text-shogun-ink mb-1">
+                  {dailyStory.title}
+                </h3>
+                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                  {dailyStory.summary}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-shogun-gold font-bold text-sm">
+                    Start Today&apos;s Story →
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    +50 武功 on completion
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
+      </section>}
+
+      {/* Training streak + rank badge */}
+      {user?.id && (
+        <TrainingStreakBadge
+          streak={dbUser?.currentStreak ?? 0}
+          rankName={RANK_NAMES[dbUser?.rank ?? 0]}
+        />
+      )}
 
       {/* Free Stories */}
       <section className="mb-12">
@@ -56,7 +178,12 @@ export default async function StoriesPage() {
             <p className="text-gray-500 col-span-2">Coming soon.</p>
           ) : (
             freeStories.map((story) => (
-              <StoryCard key={story.id} story={story} locked={false} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                locked={false}
+                completed={completedIds.has(story.id)}
+              />
             ))
           )}
         </div>
@@ -83,7 +210,12 @@ export default async function StoriesPage() {
             <p className="text-gray-500 col-span-2">Coming soon.</p>
           ) : (
             premiumStories.map((story) => (
-              <StoryCard key={story.id} story={story} locked={!isPremium} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                locked={!isPremium}
+                completed={completedIds.has(story.id)}
+              />
             ))
           )}
         </div>
@@ -95,6 +227,7 @@ export default async function StoriesPage() {
 function StoryCard({
   story,
   locked,
+  completed,
 }: {
   story: {
     id: string;
@@ -103,28 +236,60 @@ function StoryCard({
     summary: string;
     era: string;
     figure: string | null;
+    imageUrl: string | null;
   };
   locked: boolean;
+  completed: boolean;
 }) {
   const card = (
     <div
-      className={`p-5 rounded-lg border transition-shadow ${
+      className={`rounded-lg border transition-shadow relative overflow-hidden ${
         locked
           ? "bg-gray-50 border-gray-200 opacity-75"
+          : completed
+          ? "bg-white border-green-300 hover:shadow-md cursor-pointer"
           : "bg-white border-gray-200 hover:shadow-md cursor-pointer"
       }`}
     >
-      <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
-        {story.era}
-      </span>
-      {story.figure && (
-        <span className="text-xs text-gray-500 ml-2">— {story.figure}</span>
+      {/* Cover image */}
+      {story.imageUrl && (
+        <div className="relative w-full h-36 sm:h-40 bg-gray-100">
+          <Image
+            src={story.imageUrl}
+            alt={story.title}
+            fill
+            unoptimized
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-center"
+          />
+          {locked && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <span className="text-white text-2xl">🔒</span>
+            </div>
+          )}
+        </div>
       )}
-      <h3 className="text-base font-bold mt-1 mb-1 text-shogun-ink flex items-center gap-2">
-        {story.title}
-        {locked && <span className="text-gray-400 text-sm">🔒</span>}
-      </h3>
-      <p className="text-sm text-gray-600 line-clamp-2">{story.summary}</p>
+
+      <div className="p-4">
+        {completed && (
+          <span className="absolute top-3 right-3 bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">
+            ✓ Done
+          </span>
+        )}
+        <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
+          {story.era}
+        </span>
+        {story.figure && (
+          <span className="text-xs text-gray-500 ml-2">— {story.figure}</span>
+        )}
+        <h3 className="text-base font-bold mt-1 mb-1 text-shogun-ink flex items-center gap-2 pr-14">
+          {story.title}
+          {locked && !story.imageUrl && (
+            <span className="text-gray-400 text-sm">🔒</span>
+          )}
+        </h3>
+        <p className="text-sm text-gray-600 line-clamp-2">{story.summary}</p>
+      </div>
     </div>
   );
 
