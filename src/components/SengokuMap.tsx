@@ -27,20 +27,20 @@ type Props = {
 };
 
 const LOCATIONS = [
-  { slug: "the-battle-of-okehazama",                        coordinates: [136.9, 35.0] as [number, number], label: "桶狭間", year: 1560 },
-  { slug: "bushido-the-way-of-the-warrior",                 coordinates: [135.7, 35.0] as [number, number], label: "京都",   year: null },
-  { slug: "the-lone-samurai-miyamoto-musashi",               coordinates: [130.9, 33.9] as [number, number], label: "巌流島", year: 1612 },
-  { slug: "from-sandal-bearer-to-ruler-toyotomi-hideyoshi", coordinates: [135.5, 34.7] as [number, number], label: "大阪城", year: 1590 },
-  { slug: "the-guns-of-nagashino",                          coordinates: [137.6, 34.9] as [number, number], label: "長篠",   year: 1575 },
-  { slug: "the-battle-that-made-japan-sekigahara",          coordinates: [136.4, 35.4] as [number, number], label: "関ヶ原", year: 1600 },
-  { slug: "the-betrayal-at-honnoji",                        coordinates: [135.7, 35.0] as [number, number], label: "本能寺", year: 1582 },
-  { slug: "hattori-hanzo-and-the-ninja-of-iga",             coordinates: [136.1, 34.8] as [number, number], label: "伊賀",   year: null },
-  { slug: "ii-naotora-the-female-lord",                     coordinates: [137.7, 34.7] as [number, number], label: "遠江",   year: null },
-  { slug: "tokugawa-ieyasu-the-patience-of-the-crane",      coordinates: [137.2, 34.8] as [number, number], label: "三河",   year: null },
-  { slug: "takeda-shingen-the-tiger-of-kai",                coordinates: [138.6, 35.7] as [number, number], label: "甲斐",   year: null },
-  { slug: "the-art-of-seppuku",                             coordinates: [135.5, 34.7] as [number, number], label: "京",     year: null },
-  { slug: "yasuke-the-african-samurai",                     coordinates: [136.1, 35.1] as [number, number], label: "安土",   year: null },
-  { slug: "the-forty-seven-ronin",                          coordinates: [139.7, 35.7] as [number, number], label: "江戸",   year: 1703 },
+  { slug: "the-battle-of-okehazama",                        coordinates: [136.88, 35.03] as [number,number], label: "桶狭間", year: 1560 },
+  { slug: "bushido-the-way-of-the-warrior",                 coordinates: [135.75, 35.01] as [number,number], label: "京都",   year: null },
+  { slug: "the-lone-samurai-miyamoto-musashi",              coordinates: [130.97, 33.95] as [number,number], label: "巌流島", year: 1612 },
+  { slug: "from-sandal-bearer-to-ruler-toyotomi-hideyoshi", coordinates: [135.52, 34.69] as [number,number], label: "大阪城", year: 1590 },
+  { slug: "the-guns-of-nagashino",                          coordinates: [137.57, 34.90] as [number,number], label: "長篠",   year: 1575 },
+  { slug: "the-battle-that-made-japan-sekigahara",          coordinates: [136.47, 35.37] as [number,number], label: "関ヶ原", year: 1600 },
+  { slug: "the-betrayal-at-honnoji",                        coordinates: [135.75, 35.00] as [number,number], label: "本能寺", year: 1582 },
+  { slug: "hattori-hanzo-and-the-ninja-of-iga",             coordinates: [136.13, 34.77] as [number,number], label: "伊賀",   year: null },
+  { slug: "ii-naotora-the-female-lord",                     coordinates: [137.73, 34.71] as [number,number], label: "遠江",   year: null },
+  { slug: "tokugawa-ieyasu-the-patience-of-the-crane",      coordinates: [137.15, 34.83] as [number,number], label: "三河",   year: null },
+  { slug: "takeda-shingen-the-tiger-of-kai",                coordinates: [138.57, 35.66] as [number,number], label: "甲斐",   year: null },
+  { slug: "the-art-of-seppuku",                             coordinates: [135.77, 34.98] as [number,number], label: "武士道", year: null },
+  { slug: "yasuke-the-african-samurai",                     coordinates: [136.07, 35.13] as [number,number], label: "安土",   year: null },
+  { slug: "the-forty-seven-ronin",                          coordinates: [139.69, 35.69] as [number,number], label: "江戸",   year: 1703 },
 ];
 
 export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
