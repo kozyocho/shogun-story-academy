@@ -207,4 +207,3 @@ npm run db:studio    # Prisma Studio 起動
 
 - `prisma/schema.prisma` を確認せずにDB関連のコードを書く
 - 環境変数をハードコードする（`.env.local` を参照すること）
-- `main` ブランチへの直接 push（PR経由を前提とする）
