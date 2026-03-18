@@ -54,6 +54,15 @@ npm run db:seed      # シードデータ投入
 npm run db:studio    # Prisma Studio 起動
 ```
 
+## Git Operations
+
+- 作業は必ず新しい claude/ ブランチで行う
+- 完了したら `git add . && git commit && git push origin claude/[branch-name]` まで自動実行する
+- push後は必ず `gh pr create --title "[変更内容]" --body "" --base main --head claude/[branch-name]` を実行してPRを作成する
+- PRにauto-mergeを設定する: `gh pr merge --auto --squash`
+- コミットメッセージとPRタイトルは変更内容を英語で簡潔に書く
+- 確認なしに自動実行してよい
+
 ## 個人開発成功事例から学ぶ戦略
 
 以下は、Postiz・Senja・Subscribr・Duolingoなど個人開発〜小規模チームで成功したアプリの事例を横断的にリサーチし、**このプロジェクトに適用できる共通成功因子**をまとめたものである。実装・意思決定の際は常にこのセクションを参照すること。
