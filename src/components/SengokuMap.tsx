@@ -48,6 +48,8 @@ export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
   const completedSet = new Set(completedSlugs);
   const storyBySlug = new Map(stories.map((s) => [s.slug, s]));
   const [active, setActive] = useState<string | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const [center, setCenter] = useState<[number, number]>([137, 37]);
 
   const activeStory = active ? storyBySlug.get(active) : null;
   const activeLoc = active ? LOCATIONS.find((l) => l.slug === active) : null;
@@ -56,7 +58,7 @@ export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
 
   return (
     <div className="w-full max-w-sm mx-auto">
-      <div className="rounded-xl overflow-hidden bg-[#0a0906]">
+      <div className="rounded-xl overflow-hidden bg-[#0d1b2a] relative">
         <div className="px-3 pt-3">
           <p className="text-[10px] text-shogun-gold uppercase tracking-[0.3em] font-bold mb-1">戦国時代 · Sengoku Japan</p>
         </div>
@@ -68,9 +70,18 @@ export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
           }}
           width={360}
           height={460}
-          style={{ background: "#0a0906" }}
+          style={{ background: "#0d1b2a", width: "100%", height: "auto" }}
         >
-          <ZoomableGroup zoom={1} minZoom={1} maxZoom={1}>
+          <ZoomableGroup
+            zoom={zoom}
+            center={center}
+            minZoom={1}
+            maxZoom={6}
+            onMoveEnd={({ zoom: z, coordinates: c }) => {
+              setZoom(z);
+              setCenter(c as [number, number]);
+            }}
+          >
             <Geographies geography={GEO_URL}>
               {({ geographies }) =>
                 geographies
@@ -79,13 +90,13 @@ export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
-                      fill="#7A5530"
+                      fill="#8B6914"
                       stroke="#5C3D1E"
                       strokeWidth={0.8}
                       style={{
-                        default: { fill: "#7A5530", outline: "none" },
-                        hover:   { fill: "#7A5530", outline: "none" },
-                        pressed: { fill: "#7A5530", outline: "none" },
+                        default: { fill: "#8B6914", outline: "none" },
+                        hover:   { fill: "#8B6914", outline: "none" },
+                        pressed: { fill: "#8B6914", outline: "none" },
                       }}
                     />
                   ))
@@ -112,30 +123,55 @@ export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
                   onMouseLeave={() => setActive(null)}
                 >
                   <circle
-                    r={isActive ? 7 : 5}
+                    r={isActive ? 7 / zoom : 5 / zoom}
                     fill={markerColor}
                     stroke={strokeColor}
-                    strokeWidth={isActive ? 2 : 1.5}
+                    strokeWidth={isActive ? 2 / zoom : 1.5 / zoom}
                     style={{ cursor: "pointer", transition: "all 0.15s ease" }}
                   />
-                  <text
-                    textAnchor="middle"
-                    y={-10}
-                    style={{
-                      fontFamily: "serif",
-                      fontSize: "8px",
-                      fill: completed ? "#D4AF37" : locked ? "#4a3828" : "#C4A97A",
-                      pointerEvents: "none",
-                      userSelect: "none",
-                    }}
-                  >
-                    {loc.label}
-                  </text>
+                  {zoom >= 2 && (
+                    <text
+                      textAnchor="middle"
+                      y={-10 / zoom}
+                      style={{
+                        fontFamily: "serif",
+                        fontSize: `${10 / zoom}px`,
+                        fill: completed ? "#D4AF37" : locked ? "#4a3828" : "#C4A97A",
+                        pointerEvents: "none",
+                        userSelect: "none",
+                      }}
+                    >
+                      {loc.label}
+                      {loc.year ? ` ${loc.year}` : ""}
+                    </text>
+                  )}
                 </Marker>
               );
             })}
           </ZoomableGroup>
         </ComposableMap>
+
+        {/* Zoom controls */}
+        <div className="absolute bottom-3 right-3 flex flex-col gap-1">
+          <button
+            onClick={() => setZoom((z) => Math.min(z * 1.5, 6))}
+            className="w-8 h-8 bg-black/60 text-shogun-gold border border-shogun-gold/30 rounded text-lg font-bold flex items-center justify-center hover:bg-black/80"
+          >
+            +
+          </button>
+          <button
+            onClick={() => setZoom((z) => Math.max(z / 1.5, 1))}
+            className="w-8 h-8 bg-black/60 text-shogun-gold border border-shogun-gold/30 rounded text-lg font-bold flex items-center justify-center hover:bg-black/80"
+          >
+            −
+          </button>
+          <button
+            onClick={() => { setZoom(1); setCenter([137, 37]); }}
+            className="w-8 h-8 bg-black/60 text-gray-400 border border-gray-700 rounded text-xs flex items-center justify-center hover:bg-black/80"
+          >
+            ↺
+          </button>
+        </div>
       </div>
 
       {/* Active story panel */}
@@ -166,6 +202,11 @@ export function SengokuMap({ stories, completedSlugs, isPremium }: Props) {
           </div>
         </div>
       )}
+
+      {/* Zoom hint */}
+      <p className="text-center text-xs text-gray-600 mt-2 mb-1">
+        Pinch or use +/− to zoom · Drag to pan
+      </p>
 
       {/* Legend */}
       <div className="mt-3 flex items-center justify-center gap-5 text-xs text-gray-600">
