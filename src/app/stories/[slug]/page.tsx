@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -51,18 +51,20 @@ export default async function StoryPage({ params }: Props) {
 
   if (!story) notFound();
 
-  if (story.isPremium) {
-    if (!user?.id) redirect("/pricing");
-
+  let isPremiumUser = false;
+  if (user?.id) {
     const subscription = await prisma.subscription.findUnique({
       where: { userId: user.id },
     });
-    const isPremium =
+    isPremiumUser =
       subscription?.status === "ACTIVE" ||
       subscription?.status === "TRIALING" ||
       subscription?.status === "LIFETIME";
-    if (!isPremium) redirect("/pricing");
   }
+
+  const isLocked = story.isPremium && !isPremiumUser;
+
+  const totalStories = await prisma.story.count();
 
   const paragraphs = story.content
     .split(/\n\n+/)
@@ -130,7 +132,36 @@ export default async function StoryPage({ params }: Props) {
         </header>
 
         {/* Animated story body with interleaved decision points */}
-        <StoryBody paragraphs={paragraphs} decisions={story.decisions} />
+        <StoryBody
+          paragraphs={paragraphs}
+          decisions={story.decisions}
+          isLocked={isLocked}
+        />
+
+        {isLocked && (
+          <div className="relative -mt-32">
+            <div className="h-32 bg-gradient-to-b from-transparent to-white" />
+            <div className="bg-white pt-4 pb-10 text-center px-4">
+              <p className="text-2xl mb-2">⚔</p>
+              <h2 className="text-xl font-bold text-shogun-ink mb-2">
+                Continue Reading with Premium
+              </h2>
+              <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+                Unlock all {totalStories} stories including vocabulary notes,
+                historical decision challenges, and comprehension quizzes.
+              </p>
+              <Link
+                href="/pricing"
+                className="inline-block bg-shogun-gold text-shogun-dark font-bold px-8 py-3 rounded hover:bg-yellow-500 transition-colors"
+              >
+                View Plans →
+              </Link>
+              <p className="text-xs text-gray-400 mt-3">
+                Monthly · Annual · Lifetime — cancel anytime
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Timeline */}
         {story.timelineEvent && (
@@ -147,53 +178,78 @@ export default async function StoryPage({ params }: Props) {
           </section>
         )}
 
-        {/* Vocabulary flashcards */}
-        {story.vocabulary.length > 0 && (
-          <section className="mt-10">
-            <h2 className="text-xl font-bold text-shogun-ink mb-1">
-              Vocabulary &amp; Cultural Notes
-            </h2>
-            <VocabFlashcards items={story.vocabulary} />
-          </section>
+        {!isLocked && (
+          <>
+            {/* Vocabulary flashcards */}
+            {story.vocabulary.length > 0 && (
+              <section className="mt-10">
+                <h2 className="text-xl font-bold text-shogun-ink mb-1">
+                  Vocabulary &amp; Cultural Notes
+                </h2>
+                <VocabFlashcards items={story.vocabulary} />
+              </section>
+            )}
+
+            {/* Vocab dojo + duel system */}
+            <GameSection
+              vocabItems={story.vocabulary.map((v) => ({
+                id: v.id,
+                term: v.term,
+                definition: v.definition,
+              }))}
+              questions={quizQuestions}
+              storyId={story.id}
+              userId={user?.id}
+              figure={story.figure}
+            />
+
+            {/* Continue Your Journey */}
+            <section className="mt-12 pt-8 border-t border-gray-200">
+              <p className="text-sm font-semibold text-shogun-ink mb-4">
+                Continue Your Journey
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/stories"
+                  className="flex-1 text-center border border-shogun-gold text-shogun-gold px-4 py-3 rounded font-semibold hover:bg-shogun-gold hover:text-shogun-dark transition-colors"
+                >
+                  ← Browse All Stories
+                </Link>
+                <Link
+                  href="/pricing"
+                  className="flex-1 text-center bg-shogun-gold text-shogun-dark px-4 py-3 rounded font-semibold hover:bg-yellow-500 transition-colors"
+                >
+                  Unlock Full Library ⚔
+                </Link>
+              </div>
+            </section>
+
+            {/* Share */}
+            <section className="mt-12 pt-8 border-t border-gray-200">
+              <p className="text-sm font-semibold text-shogun-ink mb-3">
+                Share this story
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${story.title}" — ${story.summary}`)}&url=${encodeURIComponent(`${APP_URL}/stories/${story.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-sm font-medium min-h-[44px] hover:bg-gray-800 transition-colors"
+                >
+                  𝕏 Share on X
+                </a>
+                <a
+                  href={`https://www.reddit.com/submit?url=${encodeURIComponent(`${APP_URL}/stories/${story.slug}`)}&title=${encodeURIComponent(story.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium min-h-[44px] hover:bg-orange-700 transition-colors"
+                >
+                  Reddit
+                </a>
+              </div>
+            </section>
+          </>
         )}
-
-        {/* Vocab dojo + duel system */}
-        <GameSection
-          vocabItems={story.vocabulary.map((v) => ({
-            id: v.id,
-            term: v.term,
-            definition: v.definition,
-          }))}
-          questions={quizQuestions}
-          storyId={story.id}
-          userId={user?.id}
-          figure={story.figure}
-        />
-
-        {/* Share */}
-        <section className="mt-12 pt-8 border-t border-gray-200">
-          <p className="text-sm font-semibold text-shogun-ink mb-3">
-            Share this story
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${story.title}" — ${story.summary}`)}&url=${encodeURIComponent(`${APP_URL}/stories/${story.slug}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-sm font-medium min-h-[44px] hover:bg-gray-800 transition-colors"
-            >
-              𝕏 Share on X
-            </a>
-            <a
-              href={`https://www.reddit.com/submit?url=${encodeURIComponent(`${APP_URL}/stories/${story.slug}`)}&title=${encodeURIComponent(story.title)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium min-h-[44px] hover:bg-orange-700 transition-colors"
-            >
-              Reddit
-            </a>
-          </div>
-        </section>
       </article>
     </>
   );
