@@ -53,12 +53,108 @@ export default async function StoriesPage() {
   const freeStories = stories.filter((s) => !s.isPremium);
   const premiumStories = stories.filter((s) => s.isPremium);
 
+  // 今日の日付からデイリーストーリーを決定（日付ベースのローテーション）
+  const today = new Date();
+  const dayOfYear = Math.floor(
+    (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000
+  );
+  const dailyStory = stories[dayOfYear % stories.length];
+  const dailyCompleted = completedIds.has(dailyStory.id);
+  const dailyLocked = dailyStory.isPremium && !isPremium;
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:px-6 md:py-12">
       <h1 className="text-3xl font-bold text-shogun-ink mb-2">All Stories</h1>
       <p className="text-gray-600 mb-4">
         Explore Japan&apos;s Sengoku period through fact-based narratives.
       </p>
+
+      {/* Daily Challenge */}
+      <section className="mb-10 mt-6">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">🔥</span>
+          <h2 className="text-base font-bold text-shogun-ink uppercase tracking-wider">
+            Today's Challenge
+          </h2>
+          {dbUser && dbUser.currentStreak > 0 && (
+            <span className="text-xs bg-orange-100 text-orange-600 font-bold px-2 py-0.5 rounded-full">
+              {dbUser.currentStreak} day streak
+            </span>
+          )}
+        </div>
+
+        {dailyLocked ? (
+          <div className="relative rounded-xl overflow-hidden border border-yellow-200 bg-yellow-50">
+            <div className="p-5">
+              <span className="text-xs text-shogun-red uppercase tracking-wider font-semibold">
+                {dailyStory.era}
+              </span>
+              <h3 className="text-lg font-bold text-shogun-ink mt-1 mb-1">
+                {dailyStory.title}
+              </h3>
+              <p className="text-sm text-gray-500 line-clamp-2 mb-4">
+                {dailyStory.summary}
+              </p>
+              <Link
+                href="/pricing"
+                className="inline-block bg-shogun-gold text-shogun-dark font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-yellow-500 transition-colors"
+              >
+                Unlock with Premium →
+              </Link>
+            </div>
+            <div className="absolute top-3 right-3 text-2xl">🔒</div>
+          </div>
+        ) : dailyCompleted ? (
+          <div className="rounded-xl border border-green-200 bg-green-50 p-5 flex items-center gap-4">
+            <div className="text-4xl">✅</div>
+            <div>
+              <p className="font-bold text-green-700">Today&apos;s challenge complete!</p>
+              <p className="text-sm text-green-600 mt-0.5">
+                {dailyStory.title} — Come back tomorrow for a new story.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <Link href={`/stories/${dailyStory.slug}`}>
+            <div className="rounded-xl overflow-hidden border-2 border-shogun-gold bg-white hover:shadow-lg transition-shadow cursor-pointer">
+              {dailyStory.imageUrl && (
+                <div className="relative w-full h-40 bg-gray-100">
+                  <Image
+                    src={dailyStory.imageUrl}
+                    alt={dailyStory.title}
+                    fill
+                    unoptimized
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute bottom-3 left-4">
+                    <span className="text-xs text-white/80 uppercase tracking-wider font-semibold">
+                      {dailyStory.era}
+                    </span>
+                  </div>
+                </div>
+              )}
+              <div className="p-4">
+                <h3 className="text-lg font-bold text-shogun-ink mb-1">
+                  {dailyStory.title}
+                </h3>
+                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                  {dailyStory.summary}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-shogun-gold font-bold text-sm">
+                    Start Today&apos;s Story →
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    +50 武功 on completion
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
+      </section>
 
       {/* Training streak + rank badge */}
       {user?.id && (
