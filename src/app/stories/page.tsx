@@ -75,7 +75,7 @@ export default async function StoriesPage() {
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">🔥</span>
           <h2 className="text-base font-bold text-shogun-ink uppercase tracking-wider">
-            Today's Challenge
+            Today&apos;s Challenge
           </h2>
           {dbUser && dbUser.currentStreak > 0 && (
             <span className="text-xs bg-orange-100 text-orange-600 font-bold px-2 py-0.5 rounded-full">
