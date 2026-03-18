@@ -216,3 +216,11 @@ npm run db:studio    # Prisma Studio 起動
 
 - `prisma/schema.prisma` を確認せずにDB関連のコードを書く
 - 環境変数をハードコードする（`.env.local` を参照すること）
+
+## Frontend Development
+
+- UI実装の前に必ず /mnt/skills/public/frontend-design/SKILL.md を読むこと
+- デザインの美的方向性：和風・時代劇・ダーク・ゴールドアクセント
+- モバイルファースト必須（主要ユーザーはスマートフォン）
+- 汎用AIデザイン（Inter、紫グラデ、白背景カード量産）は禁止
+- アニメーション・マイクロインタラクションを積極的に取り入れる
