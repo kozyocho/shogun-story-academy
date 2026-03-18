@@ -83,6 +83,7 @@ export function DuelMode({
   const [score, setScore] = useState(0);
   const [anim, setAnim] = useState<"slash" | "hit" | null>(null);
   const [result, setResult] = useState<CompletionData | null>(null);
+  const [showRankUp, setShowRankUp] = useState(false);
 
   const opponent = figure ?? "Enemy General";
 
@@ -134,6 +135,7 @@ export function DuelMode({
   }
 
   async function submit(finalScore: number, total: number) {
+    let completionData: CompletionData | null = null;
     if (userId) {
       try {
         const res = await fetch(`/api/story/${storyId}/complete`, {
@@ -142,8 +144,9 @@ export function DuelMode({
           body: JSON.stringify({ score: finalScore, total, dojoCompleted }),
         });
         if (res.ok) {
-          const data = (await res.json()) as CompletionData;
-          setResult(data);
+          completionData = (await res.json()) as CompletionData;
+          setResult(completionData);
+          if (completionData.rankUp) setShowRankUp(true);
         }
       } catch {
         /* ignore */
@@ -325,6 +328,54 @@ export function DuelMode({
   // ── RESULT / VICTORY ───────────────────────────────────────────────────
   return (
     <>
+      {showRankUp && result && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 px-6"
+          onClick={() => setShowRankUp(false)}
+        >
+          <style>{`
+            @keyframes rankup-scale {
+              0%   { transform: scale(0.5); opacity: 0; }
+              60%  { transform: scale(1.15); opacity: 1; }
+              100% { transform: scale(1); opacity: 1; }
+            }
+            @keyframes rankup-glow {
+              0%, 100% { text-shadow: 0 0 20px rgba(255,200,50,0.8); }
+              50%       { text-shadow: 0 0 60px rgba(255,200,50,1), 0 0 100px rgba(255,150,0,0.6); }
+            }
+            @keyframes rankup-particles {
+              0%   { transform: translateY(0) scale(1); opacity: 1; }
+              100% { transform: translateY(-120px) scale(0); opacity: 0; }
+            }
+          `}</style>
+
+          <div style={{ animation: "rankup-scale 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards" }}>
+            <p className="text-shogun-gold text-xs uppercase tracking-[0.3em] text-center mb-4 font-bold">
+              位階昇進 · Rank Up
+            </p>
+            <p
+              className="text-5xl md:text-7xl font-black text-shogun-gold text-center"
+              style={{ animation: "rankup-glow 2s ease-in-out infinite" }}
+            >
+              {result.rankName}
+            </p>
+            <div className="flex justify-center gap-2 mt-6">
+              {Array.from({ length: result.rank + 1 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-3 h-3 rounded-full bg-shogun-gold"
+                  style={{
+                    animation: `rankup-particles 1s ease-out ${i * 0.15}s forwards`,
+                  }}
+                />
+              ))}
+            </div>
+            <p className="text-gray-400 text-sm text-center mt-8">
+              Tap to continue
+            </p>
+          </div>
+        </div>
+      )}
       <div className="mt-10 rounded-xl overflow-hidden shadow-xl">
         {/* Victory banner */}
         <div className="bg-gradient-to-br from-shogun-gold via-yellow-400 to-amber-500 p-5 text-center text-shogun-dark">
@@ -332,7 +383,21 @@ export function DuelMode({
           <p className="text-3xl font-black mb-1">Victory!</p>
           {result && result.bushoEarned > 0 ? (
             <>
-              <p className="text-2xl font-bold">+{result.bushoEarned} 武功</p>
+              <div className="relative inline-block">
+                <style>{`
+                  @keyframes busho-float {
+                    0%   { transform: translateY(0) scale(0.8); opacity: 0; }
+                    20%  { opacity: 1; }
+                    100% { transform: translateY(-40px) scale(1.1); opacity: 0; }
+                  }
+                `}</style>
+                <p
+                  className="text-3xl font-black"
+                  style={{ animation: "busho-float 1.5s ease-out 0.3s forwards", opacity: 0 }}
+                >
+                  +{result.bushoEarned} 武功
+                </p>
+              </div>
               <p className="text-sm font-medium opacity-70 mt-1">
                 {score === questions.length
                   ? "Flawless. A true samurai scholar."
@@ -376,11 +441,28 @@ export function DuelMode({
                   <p className="font-bold text-lg text-shogun-gold mb-2">
                     {result.rankName}
                   </p>
-                  <div className="w-full bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                  <div className="relative w-full bg-gray-700 rounded-full h-2.5 overflow-hidden">
                     <div
-                      className="bg-shogun-gold h-2.5 rounded-full transition-all duration-700"
-                      style={{ width: `${pct}%` }}
+                      className="bg-shogun-gold h-2.5 rounded-full"
+                      style={{
+                        width: `${pct}%`,
+                        transition: "width 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s",
+                      }}
                     />
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)",
+                        backgroundSize: "200% 100%",
+                        animation: "shimmer 2s ease-in-out 1.5s infinite",
+                      }}
+                    />
+                    <style>{`
+                      @keyframes shimmer {
+                        0%   { background-position: -200% center; }
+                        100% { background-position: 200% center; }
+                      }
+                    `}</style>
                   </div>
                   <p className="text-xs text-gray-400 mt-1 text-right">
                     {result.totalBusho} 武功
