@@ -18,9 +18,11 @@ type Decision = {
 export function StoryBody({
   paragraphs,
   decisions,
+  isLocked,
 }: {
   paragraphs: string[];
   decisions: Decision[];
+  isLocked: boolean;
 }) {
   const refs = useRef<(HTMLParagraphElement | null)[]>([]);
 
@@ -51,13 +53,14 @@ export function StoryBody({
   }, []);
 
   const decisionByParagraph = new Map(decisions.map((d) => [d.afterParagraph, d]));
+  const visibleParagraphs = isLocked ? paragraphs.slice(0, 2) : paragraphs;
 
   return (
     <div
       id="story-content"
       className="prose prose-stone max-w-none leading-relaxed text-shogun-ink"
     >
-      {paragraphs.map((para, i) => (
+      {visibleParagraphs.map((para, i) => (
         <div key={i} className="not-prose">
           <p
             ref={(el) => {
@@ -67,7 +70,7 @@ export function StoryBody({
           >
             {para}
           </p>
-          {decisionByParagraph.has(i) && (
+          {!isLocked && decisionByParagraph.has(i) && (
             <StoryDecisionCard decision={decisionByParagraph.get(i)!} />
           )}
         </div>
