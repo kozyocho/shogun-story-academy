@@ -219,7 +219,7 @@ npm run db:studio    # Prisma Studio 起動
 
 ## Frontend Development
 
-- UI実装の前に必ず /mnt/skills/public/frontend-design/SKILL.md を読むこと
+- UI実装の前に必ず /root/.claude/plugins/marketplaces/anthropic-agent-skills/skills/frontend-design/SKILL.md を読むこと
 - デザインの美的方向性：和風・時代劇・ダーク・ゴールドアクセント
 - モバイルファースト必須（主要ユーザーはスマートフォン）
 - 汎用AIデザイン（Inter、紫グラデ、白背景カード量産）は禁止
