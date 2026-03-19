@@ -183,23 +183,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Diamond Divider ── */}
-      <div className="relative h-12 flex items-center overflow-hidden">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-shogun-gold/25 to-transparent" />
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-[#0d0b08] px-5">
-            <div
-              aria-hidden="true"
-              className="w-2 h-2 rotate-45 border border-shogun-gold/40"
-            />
-          </div>
-        </div>
-      </div>
-
       {/* ── Featured Stories ── */}
-      <section className="py-20 px-6">
+      <section className="pt-6 pb-20 px-6">
         <div className="max-w-5xl mx-auto">
           {/* Section header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
@@ -236,7 +221,7 @@ export default async function HomePage() {
               <Link
                 key={story.id}
                 href={`/stories/${story.slug}`}
-                className="group block relative bg-white/[0.03] border border-white/8 hover:border-shogun-gold/50 transition-all duration-400 hover:bg-white/[0.05] overflow-hidden"
+                className="group block relative bg-shogun-dark/80 border border-shogun-gold/20 hover:border-shogun-gold/60 hover:shadow-[0_0_24px_rgba(212,175,55,0.15)] transition-all duration-300 overflow-hidden"
               >
                 {/* Index watermark */}
                 <div
@@ -256,10 +241,10 @@ export default async function HomePage() {
                   <h3 className="font-display font-bold text-[17px] text-white mt-3 mb-3 leading-snug group-hover:text-shogun-gold transition-colors duration-300">
                     {story.title}
                   </h3>
-                  <p className="text-sm text-white/38 line-clamp-3 leading-relaxed mb-6 font-garamond">
+                  <p className="text-sm text-gray-400 line-clamp-3 leading-relaxed mb-6 font-garamond">
                     {story.summary}
                   </p>
-                  <div className="flex items-center gap-2 text-shogun-gold/50 group-hover:text-shogun-gold text-[11px] font-bold tracking-[0.2em] uppercase transition-colors duration-300">
+                  <div className="flex items-center gap-2 text-shogun-gold text-[11px] font-bold tracking-[0.2em] uppercase transition-colors duration-300">
                     <span>Read Story</span>
                     <svg
                       className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1"
@@ -358,7 +343,10 @@ export default async function HomePage() {
                   <div className="absolute inset-0 rounded-full border border-shogun-gold/25 group-hover:border-shogun-gold/60 transition-colors duration-400" />
                   <div className="absolute inset-0 rounded-full bg-shogun-gold/5 group-hover:bg-shogun-gold/10 transition-colors duration-400" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-shogun-gold font-display font-bold text-xl leading-none">
+                    <span
+                      className="text-shogun-gold font-bold text-xl leading-none"
+                      style={{ fontFamily: "serif" }}
+                    >
                       {kanji}
                     </span>
                   </div>
