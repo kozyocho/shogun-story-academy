@@ -292,7 +292,7 @@ export default async function HomePage() {
       </div>
 
       {/* ── How It Works ── */}
-      <section className="py-20 px-6 relative overflow-hidden">
+      <section className="py-20 px-6 relative overflow-hidden bg-shogun-dark">
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.015] to-transparent pointer-events-none"
@@ -340,8 +340,8 @@ export default async function HomePage() {
               <div key={en} className="relative text-center group">
                 {/* Step circle */}
                 <div className="relative w-16 h-16 mx-auto mb-6">
-                  <div className="absolute inset-0 rounded-full border border-shogun-gold/25 group-hover:border-shogun-gold/60 transition-colors duration-400" />
-                  <div className="absolute inset-0 rounded-full bg-shogun-gold/5 group-hover:bg-shogun-gold/10 transition-colors duration-400" />
+                  <div className="absolute inset-0 rounded-full border border-shogun-gold/40 group-hover:border-shogun-gold/60 transition-colors duration-400" />
+                  <div className="absolute inset-0 rounded-full bg-shogun-dark group-hover:bg-shogun-gold/10 transition-colors duration-400" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span
                       className="text-shogun-gold font-bold text-xl leading-none"
@@ -355,7 +355,7 @@ export default async function HomePage() {
                 <h3 className="font-display font-bold text-base mb-3 text-white group-hover:text-shogun-gold transition-colors duration-300">
                   {title}
                 </h3>
-                <p className="text-white/38 text-sm leading-relaxed max-w-[210px] mx-auto font-garamond">
+                <p className="text-gray-400 text-sm leading-relaxed max-w-[210px] mx-auto font-garamond">
                   {body}
                 </p>
               </div>
