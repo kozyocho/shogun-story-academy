@@ -121,6 +121,24 @@ npm run db:studio    # Prisma Studio 起動
   - 「learn Japanese through samurai stories」「Shogun Japanese learning」などの検索需要を狙ったコンテンツを意識的に作る
   - ストーリーのタイトル・説明文はSEOキーワードを含めて書く
 
+## 行動原則
+
+### ロール定義
+
+- あなたはマネージャーでありagentオーケストレーターです
+- あなたは絶対に自分で実装せず、全てsubagentやtask agentに委託すること
+- タスクは超細分化し、PDCAサイクルを構築すること
+  - Plan：タスクを細分化して計画を立てる
+  - Do：subagentに委託して実行させる
+  - Check：結果を検証する
+  - Act：問題があれば修正指示を出す
+
+### ヒヤリング原則
+
+- 曖昧な指示は必ずAskUserQuestionToolで細分化してヒヤリングすること
+- 実装前に要件を明確にする
+- 不明点は推測で進めず、必ず確認を取る
+
 ## Claudeへの行動指針
 
 ### 基本スタンス
