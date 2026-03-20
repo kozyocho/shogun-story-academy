@@ -31,13 +31,13 @@ async function main() {
     where: { slug: "the-battle-of-okehazama" },
     update: {
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Oda_Nobunaga.jpg?width=640",
+        "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
     },
     create: {
       slug: "the-battle-of-okehazama",
       title: "The Battle of Okehazama",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Oda_Nobunaga.jpg?width=640",
+        "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
       summary:
         "In 1560, a young Oda Nobunaga faced an army ten times the size of his own. What happened next changed the course of Japanese history.",
       content: `In the summer of 1560, the warlord Imagawa Yoshimoto marched toward Kyoto with an army of over 25,000 men. Standing in his way was Oda Nobunaga, a young lord with fewer than 3,000 soldiers.
@@ -115,13 +115,13 @@ This victory made Nobunaga famous across Japan. It showed that boldness and timi
     where: { slug: "bushido-the-way-of-the-warrior" },
     update: {
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Saigo_Takamori.jpg?width=640",
+        "https://images.unsplash.com/photo-1564650945005-1dac5e09f2a3?w=800",
     },
     create: {
       slug: "bushido-the-way-of-the-warrior",
       title: "Bushido: The Way of the Warrior",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Saigo_Takamori.jpg?width=640",
+        "https://images.unsplash.com/photo-1564650945005-1dac5e09f2a3?w=800",
       summary:
         "Honor, loyalty, and death without regret — the samurai code of Bushido shaped every aspect of a warrior's life, from the battlefield to the tea ceremony.",
       content: `The word "samurai" means "one who serves." But what a samurai served was not merely a lord — it was a code. That code was called Bushido: the Way of the Warrior.
@@ -202,13 +202,13 @@ Bushido did not disappear with the samurai class. In the early 20th century, wri
     where: { slug: "the-lone-samurai-miyamoto-musashi" },
     update: {
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Miyamoto_Musashi-Portrait.jpg?width=640",
+        "https://images.unsplash.com/photo-1606937295599-eedfc4e7b432?w=800",
     },
     create: {
       slug: "the-lone-samurai-miyamoto-musashi",
       title: "The Lone Samurai: Miyamoto Musashi",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Miyamoto_Musashi-Portrait.jpg?width=640",
+        "https://images.unsplash.com/photo-1606937295599-eedfc4e7b432?w=800",
       summary:
         "Miyamoto Musashi never lost a duel in over sixty fights. His approach to combat — and to life — still influences martial arts today.",
       content: `Miyamoto Musashi was born around 1584, near the end of the Sengoku period. He fought his first duel at age thirteen and never stopped.
@@ -266,13 +266,13 @@ In his later years, Musashi gave up dueling and turned to writing and painting. 
     where: { slug: "from-sandal-bearer-to-ruler-toyotomi-hideyoshi" },
     update: {
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Toyotomi_Hideyoshi.jpg?width=640",
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
     },
     create: {
       slug: "from-sandal-bearer-to-ruler-toyotomi-hideyoshi",
       title: "From Sandal-Bearer to Ruler: Toyotomi Hideyoshi",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Toyotomi_Hideyoshi.jpg?width=640",
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
       summary:
         "Born a peasant with no family name, Toyotomi Hideyoshi rose to become the most powerful man in Japan. His story is one of history's most remarkable ascents.",
       content: `In feudal Japan, your birth determined your destiny. Samurai were born samurai; peasants remained peasants. But Toyotomi Hideyoshi never accepted that rule.
@@ -352,13 +352,13 @@ He issued the Sword Hunt of 1588, confiscating weapons from peasants and fixing 
     where: { slug: "the-guns-of-nagashino" },
     update: {
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Nagashino_Battle.jpg?width=640",
+        "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800",
     },
     create: {
       slug: "the-guns-of-nagashino",
       title: "The Guns of Nagashino",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Nagashino_Battle.jpg?width=640",
+        "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800",
       summary:
         "In 1575, Oda Nobunaga deployed 3,000 arquebusiers in rotating volleys against the legendary Takeda cavalry. It was the day samurai warfare changed forever.",
       content: `The Takeda cavalry were the most feared fighting force in Japan. Their armored horsemen had won battle after battle across the Sengoku period, and their reputation alone was enough to unsettle enemies.
@@ -440,13 +440,13 @@ Nagashino is remembered not just as a military victory, but as a turning point. 
     where: { slug: "the-battle-that-made-japan-sekigahara" },
     update: {
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Battle_of_Sekigahara.jpg?width=640",
+        "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800",
     },
     create: {
       slug: "the-battle-that-made-japan-sekigahara",
       title: "The Battle That Made Japan: Sekigahara",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Battle_of_Sekigahara.jpg?width=640",
+        "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800",
       summary:
         "On October 21, 1600, two massive coalitions clashed in the fog of a mountain pass. When the battle ended six hours later, Tokugawa Ieyasu had won 250 years of peace.",
       content: `After the death of Toyotomi Hideyoshi in 1598, Japan's fragile unity began to fracture. Two factions emerged: those loyal to Hideyoshi's young heir, led by the administrator Ishida Mitsunari, and those who backed the powerful daimyo Tokugawa Ieyasu.
@@ -528,12 +528,15 @@ His dynasty would rule Japan for over 250 years, a period of enforced peace, rig
   // ── Story 7: The Betrayal at Honnoji (PREMIUM) ──────────────────────
   await prisma.story.upsert({
     where: { slug: "the-betrayal-at-honnoji" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
+    },
     create: {
       slug: "the-betrayal-at-honnoji",
       title: "The Betrayal at Honnoji",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Akechi_Mitsuhide.jpg?width=640",
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
       summary:
         "In 1582, Oda Nobunaga — the man closest to unifying Japan — was betrayed by one of his own generals. The assassination at Honnoji Temple shocked the nation and changed history.",
       content: `On the night of June 21, 1582, Oda Nobunaga was resting at Honnoji Temple in Kyoto with only a small personal guard. He had nearly completed his decades-long campaign to unify Japan. His most dangerous enemies were defeated. Peace seemed within reach.
@@ -621,12 +624,15 @@ In Japanese history, the phrase "Mitsuhide's three days" mocks how briefly his t
   // ── Story 8: Hattori Hanzo and the Ninja of Iga (PREMIUM) ───────────
   await prisma.story.upsert({
     where: { slug: "hattori-hanzo-and-the-ninja-of-iga" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1601814933824-fd0b851a30aa?w=800",
+    },
     create: {
       slug: "hattori-hanzo-and-the-ninja-of-iga",
       title: "Hattori Hanzo and the Ninja of Iga",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Iga_Ueno_Castle.jpg?width=640",
+        "https://images.unsplash.com/photo-1601814933824-fd0b851a30aa?w=800",
       summary:
         "Forget the myths. The real ninja were not masked assassins leaping across rooftops — they were intelligence operatives, spies, and saboteurs. Hattori Hanzo was the greatest of them.",
       content: `In popular imagination, ninja are supernatural warriors: silent, invisible, armed with throwing stars, able to vanish in a puff of smoke. The reality was more interesting — and more useful.
@@ -705,12 +711,15 @@ After the Sengoku period ended, Hanzo served as commander of Ieyasu's personal g
   // ── Story 9: Ii Naotora — The Female Lord (PREMIUM) ─────────────────
   await prisma.story.upsert({
     where: { slug: "ii-naotora-the-female-lord" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800",
+    },
     create: {
       slug: "ii-naotora-the-female-lord",
       title: "Ii Naotora: The Female Lord",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Ii_Naotora.jpg?width=640",
+        "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800",
       summary:
         "In feudal Japan, women did not rule domains. Ii Naotora did anyway — and kept her clan alive through one of the most brutal periods in samurai history.",
       content: `In the rigid hierarchy of Sengoku Japan, the idea of a woman ruling a samurai domain was almost unthinkable. Yet in 1565, when the Ii clan of Totomi Province lost its last male heir, a woman named Ii Naotora stepped forward to lead.
@@ -788,12 +797,15 @@ She died in 1582, the same year as the Honnoji Incident. The Ii clan she saved w
   // ── Story 10: Tokugawa Ieyasu — The Patience of the Crane (PREMIUM) ─
   await prisma.story.upsert({
     where: { slug: "tokugawa-ieyasu-the-patience-of-the-crane" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
+    },
     create: {
       slug: "tokugawa-ieyasu-the-patience-of-the-crane",
       title: "Tokugawa Ieyasu: The Patience of the Crane",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Tokugawa_Ieyasu2.jpg?width=640",
+        "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
       summary:
         "Nobunaga was the hawk. Hideyoshi was the monkey. Ieyasu was the crane — patient, watchful, willing to wait decades for the right moment. It worked.",
       content: `There is a famous Japanese poem about the three great unifiers of Japan. It asks: what do you do if the cuckoo will not sing? Nobunaga says: kill it. Hideyoshi says: make it want to sing. Ieyasu says: wait until it sings.
@@ -870,12 +882,15 @@ A Japanese proverb says: "The strong eagle hides its talons." Ieyasu was the pro
   // ── Story 11: Takeda Shingen — The Tiger of Kai (PREMIUM) ───────────
   await prisma.story.upsert({
     where: { slug: "takeda-shingen-the-tiger-of-kai" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800",
+    },
     create: {
       slug: "takeda-shingen-the-tiger-of-kai",
       title: "Takeda Shingen: The Tiger of Kai",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Takeda_Shingen.jpg?width=640",
+        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800",
       summary:
         "The one man Tokugawa Ieyasu genuinely feared. Takeda Shingen was the finest general of the Sengoku period — and history turned on his sudden death.",
       content: `Among all the warlords of the Sengoku period, one name made even Oda Nobunaga cautious: Takeda Shingen, the Tiger of Kai.
@@ -964,12 +979,15 @@ Without Shingen, the Takeda momentum collapsed. Nobunaga survived. Japan's histo
   // ── Story 12: The Art of Seppuku (PREMIUM) ──────────────────────────
   await prisma.story.upsert({
     where: { slug: "the-art-of-seppuku" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1440778303588-435521a205bc?w=800",
+    },
     create: {
       slug: "the-art-of-seppuku",
       title: "The Art of Seppuku",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Seppuku_2.jpg?width=640",
+        "https://images.unsplash.com/photo-1440778303588-435521a205bc?w=800",
       summary:
         "To Western eyes, ritual suicide seems incomprehensible. Understanding seppuku — why samurai chose it, how it worked, and what it meant — unlocks something essential about samurai culture.",
       content: `Of all samurai practices, seppuku is perhaps the most misunderstood in the West. It appears in films as a dramatic spectacle. In reality, it was a carefully ritualized act with deep cultural logic.
@@ -1049,12 +1067,15 @@ The practice was formally banned by the Meiji government in 1873. But its cultur
   // ── Story 13: Yasuke — The African Samurai (PREMIUM) ────────────────
   await prisma.story.upsert({
     where: { slug: "yasuke-the-african-samurai" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800",
+    },
     create: {
       slug: "yasuke-the-african-samurai",
       title: "Yasuke: The African Samurai",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Alessandro_Valignano.jpg?width=640",
+        "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800",
       summary:
         "In 1579, an African man arrived in Japan and captivated the most powerful warlord in the country. Yasuke became the first non-Japanese person known to have received the rank of samurai.",
       content: `In 1579, an Italian Jesuit missionary named Alessandro Valignano arrived in Japan accompanied by a servant whose appearance caused a sensation wherever he went. He was African — tall, powerfully built, and unlike anyone most Japanese had ever seen.
@@ -1135,12 +1156,15 @@ His story was largely forgotten for centuries, until modern historians and popul
   // ── Story 14: The Forty-Seven Ronin (PREMIUM) ────────────────────────
   await prisma.story.upsert({
     where: { slug: "the-forty-seven-ronin" },
-    update: {},
+    update: {
+      imageUrl:
+        "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=800",
+    },
     create: {
       slug: "the-forty-seven-ronin",
       title: "The Forty-Seven Ronin",
       imageUrl:
-        "https://commons.wikimedia.org/wiki/Special:FilePath/Ronin_Buried_at_Sengakuji.jpg?width=640",
+        "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=800",
       summary:
         "In 1703, forty-seven masterless samurai avenged their lord's death after two years of secret planning. Their story became the defining legend of samurai loyalty — and ended with all of them choosing to die.",
       content: `On the night of January 30, 1703, forty-seven men stormed the Edo mansion of a powerful official named Kira Yoshinaka. They had waited almost two years for this moment.
