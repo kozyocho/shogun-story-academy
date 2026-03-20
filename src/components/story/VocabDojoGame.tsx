@@ -83,17 +83,17 @@ export function VocabDojoGame({ items, onComplete }: Props) {
         <p className="text-xs text-shogun-gold uppercase tracking-wider font-semibold mb-0.5">
           単語道場 · Vocab Dojo
         </p>
-        <h2 className="text-xl font-bold text-shogun-ink">Word Matching</h2>
-        <p className="text-sm text-gray-500 mt-1">
+        <h2 className="text-xl font-bold text-white">Word Matching</h2>
+        <p className="text-sm text-gray-400 mt-1">
           Your sensei has given you a scroll. Match each term to its meaning.
         </p>
       </div>
 
       {completed ? (
-        <div className="text-center py-8 px-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+        <div className="text-center py-8 px-4 bg-shogun-gold/10 border border-shogun-gold/40 rounded-xl">
           <p className="text-3xl mb-2">⚔️</p>
-          <p className="font-bold text-shogun-ink text-lg">道場クリア！</p>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="font-bold text-shogun-gold text-lg">道場クリア！</p>
+          <p className="text-sm text-gray-400 mt-1">
             All terms mastered. +20 武功 awarded.
           </p>
         </div>
@@ -114,12 +114,12 @@ export function VocabDojoGame({ items, onComplete }: Props) {
                   className={`text-left px-3 py-3 rounded-lg border text-sm font-semibold min-h-[44px] transition-all
                     ${
                       isMatched
-                        ? "bg-green-50 border-green-300 text-green-700 opacity-50 cursor-default"
+                        ? "bg-shogun-gold/10 border-shogun-gold/40 text-shogun-gold opacity-60 cursor-default"
                         : isWrong
-                        ? "bg-red-50 border-red-400 text-red-700 scale-95"
+                        ? "bg-red-900/30 border-red-500 text-red-400 scale-95"
                         : isSelected
-                        ? "bg-shogun-ink text-white border-shogun-ink scale-[1.02] shadow-md"
-                        : "bg-white border-gray-200 text-shogun-ink hover:border-shogun-gold active:scale-95"
+                        ? "bg-shogun-gold/20 text-white border-shogun-gold scale-[1.02] shadow-md"
+                        : "bg-gray-900 border-gray-700 text-white hover:border-shogun-gold active:scale-95"
                     }`}
                 >
                   {isMatched ? "✓ " : ""}{item.term}
@@ -143,12 +143,12 @@ export function VocabDojoGame({ items, onComplete }: Props) {
                   className={`text-left px-3 py-3 rounded-lg border text-xs min-h-[44px] transition-all leading-snug
                     ${
                       isMatched
-                        ? "bg-green-50 border-green-300 text-green-700 opacity-50 cursor-default"
+                        ? "bg-shogun-gold/10 border-shogun-gold/40 text-shogun-gold opacity-60 cursor-default"
                         : isWrong
-                        ? "bg-red-50 border-red-400 text-red-700 scale-95"
+                        ? "bg-red-900/30 border-red-500 text-red-400 scale-95"
                         : isSelected
-                        ? "bg-shogun-gold/10 border-shogun-gold text-shogun-ink scale-[1.02] shadow-md"
-                        : "bg-white border-gray-200 text-gray-600 hover:border-shogun-gold active:scale-95"
+                        ? "bg-shogun-gold/20 border-shogun-gold text-white scale-[1.02] shadow-md"
+                        : "bg-gray-900 border-gray-700 text-gray-300 hover:border-shogun-gold active:scale-95"
                     }`}
                 >
                   {item.definition.length > 80

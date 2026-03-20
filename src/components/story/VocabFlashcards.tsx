@@ -40,13 +40,13 @@ export function VocabFlashcards({ items }: { items: VocabItem[] }) {
               >
                 {/* Front */}
                 <div
-                  className="absolute inset-0 bg-white border-2 border-shogun-gold rounded-xl p-4 flex flex-col justify-between"
+                  className="absolute inset-0 bg-gray-900 border-2 border-shogun-gold/60 rounded-xl p-4 flex flex-col justify-between"
                   style={{ backfaceVisibility: "hidden" }}
                 >
                   <div>
-                    <p className="font-bold text-shogun-ink text-lg leading-tight">{v.term}</p>
+                    <p className="font-bold text-white text-lg leading-tight">{v.term}</p>
                     {v.reading && (
-                      <p className="text-sm text-gray-500 mt-1">{v.reading}</p>
+                      <p className="text-sm text-gray-400 mt-1">{v.reading}</p>
                     )}
                   </div>
                   <p className="text-xs text-shogun-gold font-medium">Tap to reveal →</p>
@@ -54,15 +54,15 @@ export function VocabFlashcards({ items }: { items: VocabItem[] }) {
 
                 {/* Back */}
                 <div
-                  className="absolute inset-0 bg-amber-50 border-2 border-shogun-gold rounded-xl p-4 flex flex-col justify-between overflow-hidden"
+                  className="absolute inset-0 bg-gray-900 border-2 border-shogun-gold rounded-xl p-4 flex flex-col justify-between overflow-hidden"
                   style={{
                     backfaceVisibility: "hidden",
                     transform: "rotateY(180deg)",
                   }}
                 >
-                  <p className="text-sm text-shogun-ink leading-snug">{v.definition}</p>
+                  <p className="text-sm text-gray-200 leading-snug">{v.definition}</p>
                   {v.culturalNote && (
-                    <p className="text-xs text-gray-500 italic border-t border-amber-200 pt-2 mt-2">
+                    <p className="text-xs text-gray-500 italic border-t border-gray-700 pt-2 mt-2">
                       {v.culturalNote}
                     </p>
                   )}
