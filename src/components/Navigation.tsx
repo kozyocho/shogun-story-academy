@@ -20,35 +20,51 @@ export async function Navigation() {
     : null;
 
   return (
-    <nav className="bg-shogun-dark text-white px-4 py-3 flex items-center justify-between gap-2">
-      <Link href="/" className="text-shogun-gold font-bold text-base sm:text-xl tracking-wide shrink-0">
+    <nav className="bg-shogun-dark border-b border-shogun-gold/20 text-white px-4 py-3 flex items-center justify-between gap-2">
+      {/* Logo */}
+      <Link
+        href="/"
+        className="font-display text-shogun-gold font-bold text-base sm:text-xl tracking-wide shrink-0 hover:text-yellow-400 transition-colors duration-200"
+      >
         <span className="sm:hidden">⚔ SSA</span>
         <span className="hidden sm:inline">⚔ Shogun Story Academy</span>
       </Link>
 
       <div className="flex items-center gap-3 sm:gap-5 text-sm">
-        <Link href="/stories" className="hover:text-shogun-gold transition-colors">
+        {/* Nav links */}
+        <Link
+          href="/stories"
+          className="text-gray-300 hover:text-shogun-gold transition-colors duration-200 tracking-wider text-xs sm:text-sm uppercase font-medium"
+        >
           Stories
         </Link>
-        <Link href="/map" className="hover:text-shogun-gold transition-colors">
+        <Link
+          href="/map"
+          className="text-gray-300 hover:text-shogun-gold transition-colors duration-200 tracking-wider text-xs sm:text-sm uppercase font-medium"
+        >
           Map
         </Link>
-        <Link href="/pricing" className="hover:text-shogun-gold transition-colors">
+        <Link
+          href="/pricing"
+          className="text-gray-300 hover:text-shogun-gold transition-colors duration-200 tracking-wider text-xs sm:text-sm uppercase font-medium"
+        >
           Pricing
         </Link>
 
         {user ? (
           <div className="flex items-center gap-3">
+            {/* Streak + rank */}
             <div className="hidden sm:flex items-center gap-2 text-sm">
               {dbUser && dbUser.currentStreak > 0 && (
-                <span className="text-shogun-gold font-semibold">
+                <span className="text-shogun-gold/80 font-semibold">
                   🔥 {dbUser.currentStreak}
                 </span>
               )}
-              <span className="text-gray-300">
+              <span className="text-shogun-gold/80 font-garamond italic">
                 {dbUser ? RANK_NAMES[dbUser.rank ?? 0] : (user.user_metadata?.full_name ?? user.email)}
               </span>
             </div>
+            {/* Sign out */}
             <form
               action={async () => {
                 "use server";
@@ -59,7 +75,7 @@ export async function Navigation() {
             >
               <button
                 type="submit"
-                className="bg-shogun-red hover:bg-red-800 px-4 py-2 rounded text-white transition-colors min-h-[44px]"
+                className="border border-shogun-red/60 text-shogun-red bg-transparent hover:bg-shogun-red hover:text-white px-4 py-2 rounded text-sm font-medium transition-all duration-200 min-h-[44px] tracking-wider"
               >
                 Sign out
               </button>
@@ -81,7 +97,7 @@ export async function Navigation() {
           >
             <button
               type="submit"
-              className="bg-shogun-gold hover:bg-yellow-500 text-shogun-dark px-4 py-2 rounded font-semibold transition-colors min-h-[44px]"
+              className="bg-shogun-gold hover:bg-yellow-400 text-shogun-dark px-4 py-2 rounded font-bold transition-all duration-200 min-h-[44px] tracking-wider text-sm"
             >
               Sign in
             </button>
