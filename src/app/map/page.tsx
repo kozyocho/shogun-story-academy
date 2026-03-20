@@ -54,19 +54,22 @@ export default async function MapPage() {
   const total = stories.length;
 
   return (
-    <main className="max-w-lg mx-auto px-4 py-8 md:py-12">
+    <main className="min-h-screen bg-shogun-dark max-w-lg mx-auto px-4 py-8 md:py-12">
       {/* Header */}
       <div className="mb-6">
         <Link
           href="/stories"
-          className="text-sm text-shogun-red hover:underline inline-block mb-4 min-h-[44px] flex items-center"
+          className="text-sm text-shogun-gold hover:text-yellow-400 transition-colors inline-flex items-center gap-1.5 mb-4 min-h-[44px] font-medium tracking-wide"
         >
-          ← Back to Stories
+          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
+            <path d="M10 4L6 8l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Back to Chronicles
         </Link>
-        <h1 className="text-2xl font-black text-shogun-ink">
+        <h1 className="font-display text-2xl font-black text-white">
           ⚔️ Conquest Map
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-400 mt-1">
           {conquered > 0
             ? `${conquered} of ${total} territories conquered`
             : "Begin your campaign. Tap a location to enter the story."}
@@ -74,12 +77,17 @@ export default async function MapPage() {
 
         {/* Progress bar */}
         {conquered > 0 && (
-          <div className="mt-3 w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <div className="mt-3 w-full bg-gray-700 rounded-full h-2 overflow-hidden">
             <div
               className="bg-shogun-gold h-2 rounded-full transition-all duration-700"
               style={{ width: `${Math.round((conquered / total) * 100)}%` }}
             />
           </div>
+        )}
+        {conquered > 0 && (
+          <p className="text-xs text-gray-300 mt-1.5 text-right">
+            {Math.round((conquered / total) * 100)}% complete
+          </p>
         )}
       </div>
 
@@ -92,7 +100,7 @@ export default async function MapPage() {
 
       {/* Story list */}
       <div className="mt-8 space-y-3">
-        <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">
+        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-[0.25em] mb-4">
           All Territories
         </h2>
         {stories.map((story) => {
@@ -102,12 +110,12 @@ export default async function MapPage() {
             <Link
               key={story.slug}
               href={locked ? "/pricing" : `/stories/${story.slug}`}
-              className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-all min-h-[56px] ${
+              className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-all duration-200 min-h-[56px] ${
                 done
-                  ? "border-shogun-gold/40 bg-yellow-950/20 hover:bg-yellow-950/30"
+                  ? "border-shogun-gold/40 bg-shogun-gold/5 hover:bg-shogun-gold/10"
                   : locked
-                  ? "border-gray-200 bg-gray-50 opacity-60"
-                  : "border-gray-200 bg-white hover:border-shogun-gold hover:bg-yellow-50"
+                  ? "border-gray-700 bg-gray-900 opacity-60"
+                  : "border-gray-800 bg-gray-900 hover:border-shogun-gold/60 hover:bg-gray-800"
               }`}
             >
               <div className="min-w-0">
@@ -116,8 +124,8 @@ export default async function MapPage() {
                     done
                       ? "text-shogun-gold"
                       : locked
-                      ? "text-gray-400"
-                      : "text-shogun-ink"
+                      ? "text-gray-500"
+                      : "text-white"
                   }`}
                 >
                   {story.title}
@@ -130,9 +138,9 @@ export default async function MapPage() {
                 {done ? (
                   <span className="text-shogun-gold">✦</span>
                 ) : locked ? (
-                  <span className="text-gray-400">🔒</span>
+                  <span className="text-gray-600">🔒</span>
                 ) : (
-                  <span className="text-gray-400">→</span>
+                  <span className="text-gray-500">→</span>
                 )}
               </span>
             </Link>
